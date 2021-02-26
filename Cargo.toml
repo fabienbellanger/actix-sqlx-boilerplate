@@ -2,7 +2,7 @@
 authors = ["Fabien Bellanger <valentil@gmail.com>"]
 description = "Actix-web - SQLx boilerplate"
 edition = "2018"
-name = "actix-sqlx-boilerplate"
+name = "actix_sqlx_boilerplate"
 readme = "README.md"
 repository = "https://github.com/fabienbellanger/actix-sqlx-boilerplate"
 version = "0.1.0"
@@ -17,3 +17,34 @@ name = "actix-web"
 path = "src/main.rs"
 
 [dependencies]
+actix = "0.10.0"
+actix-cors = "0.3.0"
+actix-files = "0.5.0"
+actix-http = "2"
+actix-web = "3"
+actix-service = "1.0.6"
+actix-web-actors = "3"
+actix-web-prom = "0.5"
+askama_actix = "0.11.1"
+bytes = "0.5.6"
+chrono = "0.4.19"
+color-eyre = "0.5.10"
+config = "0.10"
+dotenv = "0.15"
+env_logger = "0.7"
+eyre = "0.6.3"
+futures = "0.3"
+jsonwebtoken = "7.2.0"
+reqwest = "0.10.8"
+serde = "1.0"
+serde_json = "1.0"
+tracing = "0.1"
+tracing-futures = "0.2"
+tracing-log = {version = "0.1", features = ["env_logger"]}
+tracing-subscriber = {version = "0.2", features = ["fmt"]}
+uuid = { version = "0.8", features = ["serde", "v4"] }
+
+
+[dependencies.askama]
+features = ["with-actix-web", "serde-json"]
+version = "0.10"

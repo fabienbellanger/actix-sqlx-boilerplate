@@ -1,3 +1,7 @@
-fn main() {
-    println!("Coucou c'est moi!");
+use actix_sqlx_boilerplate::run;
+use color_eyre::Result;
+
+#[actix_web::main]
+async fn main() -> Result<()> {
+    run().await
 }
