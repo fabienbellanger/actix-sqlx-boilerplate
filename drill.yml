@@ -1,0 +1,9 @@
+concurrency: 10
+base: 'http://localhost:8089'
+iterations: 100
+rampup: 0
+
+plan:
+  - name: Index
+    request:
+      url: /
