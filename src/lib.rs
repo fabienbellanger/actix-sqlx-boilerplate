@@ -1,10 +1,18 @@
 mod config;
+mod errors;
+pub mod handlers;
+mod logger;
 mod middlewares;
+mod routes;
 
 extern crate chrono;
 extern crate serde;
 
+#[macro_use]
+extern crate tracing;
+
 use crate::config::Config;
+use crate::logger::{get_subscriber, init_subscriber};
 use actix_cors::Cors;
 // use actix_web::middleware::errhandlers::ErrorHandlers;
 // use actix_web::middleware::Logger;
@@ -30,7 +38,13 @@ pub async fn run() -> Result<()> {
 
     // Logger
     // ------
-    // logger::init(settings.server_log_level);
+    let subscriber = get_subscriber("actix-sqlx-boilerplate".into(), "info".into());
+    init_subscriber(subscriber);
+
+    error!("Error");
+    warn!("Warn");
+    info!("Info");
+    debug!("Debug");
 
     // Initialisation du state de l'application
     // ----------------------------------------
@@ -66,6 +80,7 @@ pub async fn run() -> Result<()> {
                     .max_age(3600)
                     .finish(),
             )
+            .configure(routes::web)
     })
     .bind(format!("{}:{}", settings.server_url, settings.server_port))?
     .run()
