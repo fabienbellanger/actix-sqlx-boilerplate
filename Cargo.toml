@@ -1,0 +1,13 @@
+[package]
+authors = ["Fabien Bellanger <valentil@gmail.com>"]
+description = "Actix-web - SQLx boilerplate"
+edition = "2018"
+name = "actix-sqlx-boilerplate"
+readme = "README.md"
+repository = "https://github.com/fabienbellanger/actix-sqlx-boilerplate"
+version = "0.1.0"
+
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
