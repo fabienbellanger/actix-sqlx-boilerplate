@@ -4,6 +4,6 @@ iterations: 100
 rampup: 0
 
 plan:
-  - name: Index
+  - name: Health Check
     request:
-      url: /
+      url: /health-check

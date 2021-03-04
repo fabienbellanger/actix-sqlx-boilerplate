@@ -18,12 +18,12 @@ pub struct AppErrorMessage {
 pub enum AppError {
     #[display(fmt = "{}", message)]
     InternalError { message: String },
+
     #[display(fmt = "{}", message)]
     BadRequest { message: String },
+
     #[display(fmt = "{}", message)]
     NotFound { message: String },
-    #[display(fmt = "Unauthorized")]
-    Unauthorized,
 }
 
 impl AppError {
@@ -31,7 +31,6 @@ impl AppError {
         match self {
             Self::NotFound { message: m } => m.to_owned(),
             Self::BadRequest { message: m } => m.to_owned(),
-            Self::Unauthorized => "Unauthorized".to_owned(),
             Self::InternalError { message: m } => m.to_owned(),
         }
     }
@@ -42,7 +41,6 @@ impl ResponseError for AppError {
         match *self {
             AppError::InternalError { .. } => StatusCode::INTERNAL_SERVER_ERROR,
             AppError::BadRequest { .. } => StatusCode::BAD_REQUEST,
-            AppError::Unauthorized => StatusCode::UNAUTHORIZED,
             AppError::NotFound { .. } => StatusCode::NOT_FOUND,
         }
     }

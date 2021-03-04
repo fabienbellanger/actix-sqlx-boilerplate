@@ -23,7 +23,6 @@ impl Config {
         let mut c = config::Config::new();
         c.merge(config::Environment::default())?;
 
-        c.try_into()
-            .context("loading configuration from environment")
+        c.try_into().context("loading configuration from environment")
     }
 }
