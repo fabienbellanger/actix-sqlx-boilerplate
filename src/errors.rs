@@ -55,3 +55,13 @@ impl ResponseError for AppError {
             })
     }
 }
+
+impl From<sqlx::Error> for AppError {
+    fn from(error: sqlx::Error) -> Self {
+        match error {
+            _ => Self::InternalError {
+                message: "Database Error".to_owned(),
+            },
+        }
+    }
+}

@@ -1,9 +1,10 @@
-mod config;
+pub mod config;
 mod errors;
 pub mod handlers;
 mod logger;
 mod middlewares;
 mod models;
+mod repositories;
 mod routes;
 
 extern crate chrono;
@@ -15,29 +16,18 @@ extern crate tracing;
 use crate::config::Config;
 use crate::logger::{get_subscriber, init_subscriber};
 use actix_cors::Cors;
-// use actix_web::middleware::errhandlers::ErrorHandlers;
-// use actix_web::middleware::Logger;
 use actix_web::middleware::errhandlers::ErrorHandlers;
 use actix_web::{http, App, HttpServer};
 use actix_web_prom::PrometheusMetrics;
 use color_eyre::Result;
+use sqlx::{MySql, Pool};
 
 #[derive(Debug, Clone)]
 pub struct AppState {
     pub jwt_secret_key: String,
 }
 
-pub async fn run() -> Result<()> {
-    // Load configuration
-    // ------------------
-    let settings = Config::from_env().expect("Cannot find or invalid .env file");
-    let jwt_secret_key = settings.jwt_secret_key;
-    // let db_url = settings.database_url;
-
-    // Installation de Color Eyre
-    // --------------------------
-    color_eyre::install()?;
-
+pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
     // Logger
     // ------
     let subscriber = get_subscriber("actix-sqlx-boilerplate".into(), "info".into());
@@ -46,12 +36,8 @@ pub async fn run() -> Result<()> {
     // Initialisation du state de l'application
     // ----------------------------------------
     let data = AppState {
-        jwt_secret_key: jwt_secret_key.clone(),
+        jwt_secret_key: settings.jwt_secret_key.clone(),
     };
-
-    // Initialisation du pool MySQL via r2d2
-    // -------------------------------------
-    // let pool = db::init(&db_url).expect("Failed to create MySQL pool.");
 
     // Prometheus
     // ----------
@@ -61,7 +47,7 @@ pub async fn run() -> Result<()> {
     // ------------
     HttpServer::new(move || {
         App::new()
-            // .data(pool.clone())
+            .data(db_pool.clone())
             .data(data.clone())
             .wrap(prometheus.clone())
             .wrap(middlewares::timer::Timer)
@@ -87,6 +73,7 @@ pub async fn run() -> Result<()> {
                     .finish(),
             )
             .configure(routes::web)
+            .configure(routes::api)
     })
     .bind(format!("{}:{}", settings.server_url, settings.server_port))?
     .run()

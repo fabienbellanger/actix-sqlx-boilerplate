@@ -7,3 +7,6 @@ plan:
   - name: Health Check
     request:
       url: /health-check
+  - name: List of all users
+    request:
+      url: /v1/users

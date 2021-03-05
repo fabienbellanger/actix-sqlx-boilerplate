@@ -17,17 +17,14 @@ name = "actix-web"
 path = "src/main.rs"
 
 [dependencies]
-actix = "0.10.0"
 actix-cors = "0.3.0"
-actix-files = "0.5.0"
 actix-http = "2"
 actix-web = "3"
 actix-service = "1.0.6"
-actix-web-actors = "3"
 actix-web-prom = "0.5"
 askama_actix = "0.11.1"
 bytes = "0.5.6"
-chrono = "0.4.19"
+chrono = { version = "0.4.19", features = ["serde"] }
 color-eyre = "0.5.10"
 config = "0.10"
 derive_more = "0.99.11"
@@ -40,7 +37,7 @@ log = "0.4.11"
 reqwest = "0.10.8"
 serde = "1.0"
 serde_json = "1.0"
-sqlx = { version = "0.5.1", default-features = false, features = ["runtime-actix-rustls", "macros", "mysql", "uuid", "chrono", "migrate"] }
+sqlx = { version = "0.4.2", default-features = false, features = ["runtime-actix-rustls", "macros", "mysql", "uuid", "chrono", "migrate"] }
 tracing = "0.1"
 tracing-futures = "0.2"
 tracing-log = {version = "0.1", features = ["env_logger"]}
