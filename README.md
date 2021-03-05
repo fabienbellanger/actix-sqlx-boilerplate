@@ -33,3 +33,8 @@ To create a migration:
 ```bash
 sqlx migrate add -r <name>
 ```
+
+## TODO list
+-  [ ] Implement JWT auth
+-  [ ] Add custom Tracing formatter
+-  [ ] Add SQLx auto-migrate

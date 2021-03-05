@@ -1,3 +1,5 @@
+//! User model module
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug)]

@@ -1,6 +1,6 @@
 //! JWT middleware module
 
-// use crate::models::auth;
+use crate::models::auth;
 use crate::AppState;
 use actix_service::{Service, Transform};
 use actix_web::{
@@ -17,6 +17,7 @@ use futures::{
 };
 use std::pin::Pin;
 use std::task::{Context, Poll};
+use sqlx::MySqlPool;
 
 const AUTHORIZATION: &str = "Authorization";
 
@@ -71,18 +72,19 @@ where
                 if let Ok(auth_str) = auth_header.to_str() {
                     if auth_str.starts_with("bearer") || auth_str.starts_with("Bearer") {
                         let token = auth_str[6..auth_str.len()].trim();
-                        // if let Ok(token_data) = auth::JWT::parse(token.to_owned(), secret_key.to_owned()) {
-                        //     if let Some(pool) = req.app_data::<Data<MysqlPool>>() {
-                        //         if let Ok(conn) = db::mysql_pool_handler(pool.clone()) {
-                        //             let user = User::get_by_id(&conn, token_data.user_id);
-                        //             if user.is_ok() {
-                        //                 auth_success = true;
-                        //             }
-                        //         }
-                        //     }
-                        // } else {
-                        //     error!("Failed to parse token: {}", token);
-                        // }
+                        if let Ok(claims) = auth::JWT::parse(token.to_owned(), secret_key.to_owned()) {
+                            if let Some(pool) = req.app_data::<Data<MySqlPool>>() {
+                                let _pool = pool.get_ref();
+                                // if let Ok(conn) = db::mysql_pool_handler(pool.clone()) {
+                                //     let user = User::get_by_id(&conn, claims.user_id);
+                                //     if user.is_ok() {
+                                //         auth_success = true;
+                                //     }
+                                // }
+                            }
+                        } else {
+                            error!("Failed to parse token: {}", token);
+                        }
                         todo!("Add User model and database");
                     }
                 }
