@@ -1,6 +1,4 @@
-use color_eyre::Result;
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct User {
@@ -16,7 +14,7 @@ pub struct User {
 }
 
 impl User {
-    pub fn fullname(&self) -> String {
+    pub fn _fullname(&self) -> String {
         let mut fullname = String::new();
 
         if !self.firstname.is_empty() {
@@ -41,16 +39,16 @@ fn test_fullname() {
         updated_at: sqlx::types::chrono::Utc::now(),
         deleted_at: None,
     };
-    assert_eq!("Fabien Bellanger", user.fullname());
+    assert_eq!("Fabien Bellanger", user._fullname());
 
     user.firstname = String::from("");
-    assert_eq!("Bellanger", user.fullname());
+    assert_eq!("Bellanger", user._fullname());
 
     user.firstname = String::from("Fabien");
     user.lastname = String::from("");
-    assert_eq!("Fabien", user.fullname());
+    assert_eq!("Fabien", user._fullname());
 
     user.firstname = String::from("");
     user.lastname = String::from("");
-    assert_eq!("", user.fullname());
+    assert_eq!("", user._fullname());
 }

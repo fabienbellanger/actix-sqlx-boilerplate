@@ -1,8 +1,7 @@
 //! JWT middleware module
 
-use crate::models::auth;
+// use crate::models::auth;
 use crate::AppState;
-// use crate::{db, db::MysqlPool};
 use actix_service::{Service, Transform};
 use actix_web::{
     dev::{ServiceRequest, ServiceResponse},

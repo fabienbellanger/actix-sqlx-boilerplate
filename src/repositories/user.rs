@@ -1,6 +1,4 @@
-use crate::errors::AppError;
 use crate::models::user::User;
-use actix_web::web;
 use futures::stream::BoxStream;
 use sqlx::mysql::MySqlRow;
 use sqlx::{MySqlPool, Row};

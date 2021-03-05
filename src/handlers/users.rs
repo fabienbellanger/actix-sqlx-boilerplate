@@ -2,10 +2,8 @@ use crate::errors::AppError;
 use crate::models::user::User;
 use crate::repositories::user::UserRepository;
 use actix_web::{web, HttpResponse, Responder};
-use futures::StreamExt;
 use futures::TryStreamExt;
-use sqlx::mysql::MySqlRow;
-use sqlx::{MySqlPool, Row};
+use sqlx::MySqlPool;
 use tracing::instrument;
 
 // Route: GET "/v1/users"
