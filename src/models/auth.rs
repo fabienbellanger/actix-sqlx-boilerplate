@@ -51,7 +51,6 @@ impl JWT {
     // Parse JWT
     pub fn parse(token: String, secret_key: String) -> Result<Claims, Box<dyn std::error::Error>> {
         let validation = Validation::new(Algorithm::HS512);
-
         let token = decode::<Claims>(&token, &DecodingKey::from_secret(secret_key.as_bytes()), &validation)?;
 
         Ok(token.claims)

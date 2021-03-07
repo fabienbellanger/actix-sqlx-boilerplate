@@ -24,6 +24,9 @@ pub enum AppError {
 
     #[display(fmt = "{}", message)]
     NotFound { message: String },
+
+    #[display(fmt = "Unauthorized")]
+    Unauthorized,
 }
 
 impl AppError {
@@ -32,6 +35,7 @@ impl AppError {
             Self::NotFound { message: m } => m.to_owned(),
             Self::BadRequest { message: m } => m.to_owned(),
             Self::InternalError { message: m } => m.to_owned(),
+            Self::Unauthorized => "Unauthorized".to_owned(),
         }
     }
 }
@@ -42,6 +46,7 @@ impl ResponseError for AppError {
             AppError::InternalError { .. } => StatusCode::INTERNAL_SERVER_ERROR,
             AppError::BadRequest { .. } => StatusCode::BAD_REQUEST,
             AppError::NotFound { .. } => StatusCode::NOT_FOUND,
+            AppError::Unauthorized => StatusCode::UNAUTHORIZED,
         }
     }
 

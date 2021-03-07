@@ -29,6 +29,21 @@ impl User {
     }
 }
 
+#[derive(Deserialize, Debug)]
+pub struct Login {
+    pub email: String,
+    pub password: String,
+}
+
+#[derive(Serialize, Debug)]
+pub struct LoginResponse {
+    pub lastname: String,
+    pub firstname: String,
+    pub email: String,
+    pub token: String,
+    pub expires_at: String,
+}
+
 #[test]
 fn test_fullname() {
     let mut user = User {

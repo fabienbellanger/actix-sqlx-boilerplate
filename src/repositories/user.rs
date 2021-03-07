@@ -1,7 +1,9 @@
-use crate::models::user::User;
+use crate::models::user::{Login, User};
 use futures::stream::BoxStream;
 use sqlx::mysql::MySqlRow;
 use sqlx::{MySqlPool, Row};
+use sha2::{Digest, Sha512};
+use chrono::{TimeZone, Utc};
 
 pub struct UserRepository;
 
@@ -24,5 +26,30 @@ impl UserRepository {
             deleted_at: row.get(7),
         })
         .fetch(pool)
+    }
+
+    pub async fn login(pool: &MySqlPool, input: Login) -> Result<User, sqlx::Error> {
+        let hashed_password = format!("{:x}", Sha512::digest(&input.password.as_bytes()));
+        let result = sqlx::query!(
+            r#"
+                SELECT * 
+                FROM users 
+                WHERE email = ?
+                    AND password = ?
+                    AND deleted_at IS NULL
+            "#, input.email, hashed_password
+        )
+        .fetch_one(pool).await?;
+
+        Ok(User{
+            id: result.id,
+            password: result.password,
+            lastname: result.lastname,
+            firstname: result.firstname,
+            email: result.email,
+            created_at: Utc.from_utc_datetime(&result.created_at),
+            updated_at: Utc.from_utc_datetime(&result.updated_at),
+            deleted_at: None,
+        })
     }
 }
