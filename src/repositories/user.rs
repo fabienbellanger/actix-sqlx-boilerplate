@@ -60,7 +60,7 @@ impl UserRepository {
 
     /// Returns a user by its ID
     /// TODO: faire comme get_all pour que cela fonctionne dans le middleware d'auth
-    pub fn get_by_id(pool: &MySqlPool, id: String) -> Result<User, sqlx::Error> {
+    pub async fn get_by_id(pool: &MySqlPool, id: String) -> Result<User, sqlx::Error> {
         let result = sqlx::query!(
             r#"
                 SELECT * 
