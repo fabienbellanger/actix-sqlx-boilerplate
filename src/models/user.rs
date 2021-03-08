@@ -1,6 +1,7 @@
 //! User model module
 
 use serde::{Deserialize, Serialize};
+use sqlx::types::chrono::{DateTime, Utc};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct User {
@@ -10,12 +11,34 @@ pub struct User {
     pub email: String,
     #[serde(skip_serializing)]
     pub password: String,
-    pub created_at: sqlx::types::chrono::DateTime<sqlx::types::chrono::Utc>,
-    pub updated_at: sqlx::types::chrono::DateTime<sqlx::types::chrono::Utc>,
-    pub deleted_at: Option<sqlx::types::chrono::DateTime<sqlx::types::chrono::Utc>>,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
+    pub deleted_at: Option<DateTime<Utc>>,
 }
 
 impl User {
+    pub fn init(
+        id: String,
+        lastname: String,
+        firstname: String,
+        email: String,
+        password: String,
+        created_at: DateTime<Utc>,
+        updated_at: DateTime<Utc>,
+        deleted_at: Option<DateTime<Utc>>,
+    ) -> Self {
+        Self {
+            id,
+            lastname,
+            firstname,
+            email,
+            password,
+            created_at,
+            updated_at,
+            deleted_at,
+        }
+    }
+
     pub fn _fullname(&self) -> String {
         let mut fullname = String::new();
 
@@ -37,6 +60,7 @@ pub struct Login {
 
 #[derive(Serialize, Debug)]
 pub struct LoginResponse {
+    pub id: String,
     pub lastname: String,
     pub firstname: String,
     pub email: String,
@@ -52,8 +76,8 @@ fn test_fullname() {
         firstname: String::from("Fabien"),
         email: String::from(""),
         password: String::from(""),
-        created_at: sqlx::types::chrono::Utc::now(),
-        updated_at: sqlx::types::chrono::Utc::now(),
+        created_at: Utc::now(),
+        updated_at: Utc::now(),
         deleted_at: None,
     };
     assert_eq!("Fabien Bellanger", user._fullname());

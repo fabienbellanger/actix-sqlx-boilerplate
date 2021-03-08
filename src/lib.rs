@@ -25,6 +25,7 @@ use sqlx::{MySql, Pool};
 #[derive(Debug, Clone)]
 pub struct AppState {
     pub jwt_secret_key: String,
+    pub jwt_lifetime: i64,
 }
 
 pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
@@ -37,6 +38,7 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
     // ----------------------------------------
     let data = AppState {
         jwt_secret_key: settings.jwt_secret_key.clone(),
+        jwt_lifetime: settings.jwt_lifetime,
     };
 
     // Prometheus

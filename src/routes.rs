@@ -10,12 +10,14 @@ pub fn web(cfg: &mut web::ServiceConfig) {
 
 /// Defines API's routes
 pub fn api(cfg: &mut web::ServiceConfig) {
-    cfg.service(web::scope("/v1")
-        .route("/login", web::post().to(handlers::users::login))
-        .service(
-            web::scope("/users")
-                // .wrap(middlewares::auth::Authentication)
-                .route("", web::get().to(handlers::users::get_all))
-        ),
+    cfg.service(
+        web::scope("/v1")
+            .route("/login", web::post().to(handlers::users::login))
+            .service(
+                web::scope("/users")
+                    // .wrap(middlewares::auth::Authentication)
+                    .route("/", web::get().to(handlers::users::get_all))
+                    .route("/{id}", web::get().to(handlers::users::get_by_id)),
+            ),
     );
 }

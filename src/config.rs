@@ -12,6 +12,7 @@ pub struct Config {
     pub server_port: String,
     pub rust_log: String,
     pub jwt_secret_key: String,
+    pub jwt_lifetime: i64,
     pub database_url: String,
 }
 

@@ -15,9 +15,9 @@ use futures::{
     future::{ok, Ready},
     Future,
 };
+use sqlx::MySqlPool;
 use std::pin::Pin;
 use std::task::{Context, Poll};
-use sqlx::MySqlPool;
 
 const AUTHORIZATION: &str = "Authorization";
 
@@ -75,6 +75,8 @@ where
                         if let Ok(claims) = auth::JWT::parse(token.to_owned(), secret_key.to_owned()) {
                             if let Some(pool) = req.app_data::<Data<MySqlPool>>() {
                                 let _pool = pool.get_ref();
+                                // TODO: Regarder : https://github.com/biluohc/actixweb-sqlx-jwt/blob/master/src/middlewares/auth.rs
+                                // let user = UserRepository::get_by_id(_pool, claims.user_id).await;
                                 // if let Ok(conn) = db::mysql_pool_handler(pool.clone()) {
                                 //     let user = User::get_by_id(&conn, claims.user_id);
                                 //     if user.is_ok() {
