@@ -16,14 +16,13 @@ use futures::{
     Future,
 };
 use sqlx::MySqlPool;
-use std::pin::Pin;
+use std::{cell::RefCell, pin::Pin, rc::Rc};
 use std::task::{Context, Poll};
-
-const AUTHORIZATION: &str = "Authorization";
+use crate::repositories::user::UserRepository;
 
 pub struct Authentication;
 
-impl<S, B> Transform<S> for Authentication
+impl<S: 'static, B> Transform<S> for Authentication
 where
     S: Service<Request = ServiceRequest, Response = ServiceResponse<B>, Error = Error>,
     S::Future: 'static,
@@ -37,17 +36,19 @@ where
     type Future = Ready<Result<Self::Transform, Self::InitError>>;
 
     fn new_transform(&self, service: S) -> Self::Future {
-        ok(AuthenticationMiddleware { service })
+        ok(AuthenticationMiddleware { 
+            service: Rc::new(RefCell::new(service)),
+        })
     }
 }
 
 pub struct AuthenticationMiddleware<S> {
-    service: S,
+    service: Rc<RefCell<S>>,
 }
 
 impl<S, B> Service for AuthenticationMiddleware<S>
 where
-    S: Service<Request = ServiceRequest, Response = ServiceResponse<B>, Error = Error>,
+    S: Service<Request = ServiceRequest, Response = ServiceResponse<B>, Error = Error> + 'static,
     S::Future: 'static,
     B: 'static,
 {
@@ -62,42 +63,60 @@ where
     }
 
     fn call(&mut self, req: ServiceRequest) -> Self::Future {
-        let mut auth_success: bool = false;
+        let mut service_cloned = self.service.clone();
+        let mut is_token_valid = false;
+        let mut user_id = String::new();
 
         if Method::OPTIONS == *req.method() {
-            auth_success = true;
+            is_token_valid = true;
         } else if let Some(app_state) = req.app_data::<Data<AppState>>() {
             let secret_key = &app_state.jwt_secret_key;
-            if let Some(auth_header) = req.headers().get(AUTHORIZATION) {
-                if let Ok(auth_str) = auth_header.to_str() {
-                    if auth_str.starts_with("bearer") || auth_str.starts_with("Bearer") {
-                        let token = auth_str[6..auth_str.len()].trim();
-                        if let Ok(claims) = auth::JWT::parse(token.to_owned(), secret_key.to_owned()) {
-                            if let Some(pool) = req.app_data::<Data<MySqlPool>>() {
-                                let _pool = pool.get_ref();
-                                // TODO: Regarder : https://github.com/biluohc/actixweb-sqlx-jwt/blob/master/src/middlewares/auth.rs
-                                // let user = UserRepository::get_by_id(_pool, claims.user_id).await;
-                                // if let Ok(conn) = db::mysql_pool_handler(pool.clone()) {
-                                //     let user = User::get_by_id(&conn, claims.user_id);
-                                //     if user.is_ok() {
-                                //         auth_success = true;
-                                //     }
-                                // }
-                            }
-                        } else {
-                            error!("Failed to parse token: {}", token);
-                        }
-                        todo!("Add User model and database");
+            let token = req
+                .headers()
+                .get("Authorization")
+                .and_then(|h| h.to_str().ok())
+                .and_then(|h| {
+                    let words = h.split("Bearer").collect::<Vec<&str>>();
+                    words.get(1).map(|w| w.trim())
+                });
+
+            is_token_valid = match token {
+                Some(token) => {
+                    let claims = auth::JWT::parse(token.to_owned(), secret_key.to_owned());
+                    match claims {
+                        Ok(claims) => {
+                            user_id = claims.user_id;
+                            true
+                        },
+                        _ => false,
                     }
-                }
-            }
+                },
+                _ => false,
+            };
         }
 
-        if auth_success {
-            let fut = self.service.call(req);
+        if is_token_valid {
             Box::pin(async move {
-                let res = fut.await?;
-                Ok(res)
+                // Check if user is still valid
+                let pool = req.app_data::<Data<MySqlPool>>();
+                let ok = match pool {
+                    Some(pool) => UserRepository::get_by_id(pool.get_ref(), user_id).await.is_ok(),
+                    None => false,
+                };
+
+                if ok {
+                    service_cloned.call(req).await
+                } else {
+                    Ok(req.into_response(
+                        HttpResponse::Unauthorized()
+                            .json(crate::errors::AppErrorMessage {
+                                code: StatusCode::UNAUTHORIZED.as_u16(),
+                                error: "Unauthorized".to_owned(),
+                                message: "Unauthorized".to_owned(),
+                            })
+                            .into_body(),
+                    ))
+                }
             })
         } else {
             Box::pin(async move {

@@ -7,10 +7,8 @@ use actix_web::{web, HttpResponse, Responder};
 use chrono::{DateTime, NaiveDateTime, SecondsFormat, Utc};
 use futures::TryStreamExt;
 use sqlx::MySqlPool;
-use tracing::instrument;
 
 // Route: POST "/v1/login"
-#[instrument]
 pub async fn login(
     pool: web::Data<MySqlPool>,
     data: web::Data<AppState>,
@@ -50,7 +48,6 @@ pub async fn login(
 }
 
 // Route: GET "/v1/users"
-#[instrument]
 pub async fn get_all(pool: web::Data<MySqlPool>) -> Result<impl Responder, AppError> {
     let mut stream = UserRepository::get_all(pool.get_ref());
     let mut users: Vec<User> = Vec::new();
@@ -62,7 +59,6 @@ pub async fn get_all(pool: web::Data<MySqlPool>) -> Result<impl Responder, AppEr
 }
 
 // Route: GET "/v1/users/{id}"
-#[instrument]
 pub async fn get_by_id(
     pool: web::Data<MySqlPool>,
     web::Path(id): web::Path<String>,

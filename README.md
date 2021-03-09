@@ -100,3 +100,5 @@ sqlx migrate add -r <name>
 -  [ ] Implement JWT auth
 -  [ ] Add custom Tracing formatter
 -  [ ] Add SQLx auto-migrate
+-  [ ] Regarder [actix_sqlx_mysql_user_crud](https://github.com/jamesjmeyer210/actix_sqlx_mysql_user_crud)
+-  [ ] Regarder [actixweb-sqlx-jwt](https://github.com/biluohc/actixweb-sqlx-jwt/blob/master/src/middlewares/auth.rs)

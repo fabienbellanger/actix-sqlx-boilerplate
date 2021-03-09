@@ -15,8 +15,8 @@ pub fn api(cfg: &mut web::ServiceConfig) {
             .route("/login", web::post().to(handlers::users::login))
             .service(
                 web::scope("/users")
-                    // .wrap(middlewares::auth::Authentication)
-                    .route("/", web::get().to(handlers::users::get_all))
+                    .wrap(crate::middlewares::auth::Authentication)
+                    .route("", web::get().to(handlers::users::get_all))
                     .route("/{id}", web::get().to(handlers::users::get_by_id)),
             ),
     );
