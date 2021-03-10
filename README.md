@@ -41,7 +41,8 @@ A simple Actix-web boilerplate using SQLx
         "firstname": "Fabien",
         "lastname": "Bellanger",
         "created_at": "2021-03-05T11:29:55Z",
-        "updated_at": "2021-03-05T12:30:02Z"    }
+        "updated_at": "2021-03-05T12:30:02Z"
+    }
     ```
 
 - **[GET] `/v1/users`**: Users list
@@ -112,7 +113,7 @@ sqlx migrate add -r <name>
 
 ## TODO list
 -  [x] Implement JWT auth
--  [ ] Faire la route /register
+-  [x] Faire la route /register
 -  [ ] Mieux gérer la route /login quand le user est supprimé
 -  [ ] Add custom Tracing formatter
 -  [ ] Add SQLx auto-migrate

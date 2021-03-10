@@ -2,7 +2,7 @@ use crate::models::user::{Login, User};
 use chrono::{TimeZone, Utc};
 use futures::stream::BoxStream;
 use sha2::{Digest, Sha512};
-use sqlx::mysql::MySqlRow;
+use sqlx::mysql::{MySqlDone, MySqlRow};
 use sqlx::{MySqlPool, Row};
 
 pub struct UserRepository;
@@ -44,7 +44,26 @@ impl UserRepository {
     }
 
     /// Add a new user
-    pub fn create(pool: &MySqlPool, user: User) {}
+    pub async fn create(pool: &MySqlPool, user: &mut User) -> Result<MySqlDone, sqlx::Error> {
+        user.password = format!("{:x}", Sha512::digest(&user.password.as_bytes()));
+
+        sqlx::query!(
+            r#"
+                INSERT INTO users (id, lastname, firstname, email, password, created_at, updated_at, deleted_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            "#,
+            user.id,
+            user.lastname,
+            user.firstname,
+            user.email,
+            user.password,
+            user.created_at,
+            user.updated_at,
+            user.deleted_at,
+        )
+        .execute(pool)
+        .await
+    }
 
     /// Returns all users not deleted
     pub fn get_all(pool: &MySqlPool) -> BoxStream<Result<Result<User, sqlx::Error>, sqlx::Error>> {

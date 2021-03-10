@@ -43,7 +43,7 @@ pub async fn login(
                         firstname: user.firstname.to_owned(),
                         email: user.email,
                         token: token.0,
-                        expires_at: expires_at.to_rfc3339_opts(SecondsFormat::Secs, true), // format("%Y-%m-%d %H:%M:%S").to_string(),
+                        expires_at: expires_at.to_rfc3339_opts(SecondsFormat::Secs, true),
                     }))
                 }
                 _ => Err(AppError::Unauthorized {}),
@@ -53,16 +53,17 @@ pub async fn login(
 }
 
 // Route: POST "/v1/register"
-pub async fn register(
-    pool: web::Data<MySqlPool>,
-    data: web::Data<AppState>,
-    form: web::Json<UserCreation>,
-) -> Result<impl Responder, AppError> {
-    // TODO: Make a validation of UserCreation fileds
+// TODO: Make a validation of UserCreation fileds
+pub async fn register(pool: web::Data<MySqlPool>, form: web::Json<UserCreation>) -> Result<impl Responder, AppError> {
+    let mut user = User::new(form.0);
+    let result = UserRepository::create(pool.get_ref(), &mut user).await;
 
-    let user = User::new(form.0);
-    dbg!(user);
-    Ok(HttpResponse::Ok().finish())
+    match result {
+        Ok(_) => Ok(HttpResponse::Ok().json(user)),
+        _ => Err(AppError::InternalError {
+            message: String::from("error during user creation"),
+        }),
+    }
 }
 
 // Route: GET "/v1/users"
@@ -85,7 +86,7 @@ pub async fn get_by_id(
 
     match user {
         Some(user) => Ok(HttpResponse::Ok().json(user)),
-        None => Err(AppError::NotFound {
+        _ => Err(AppError::NotFound {
             message: String::from("no user found"),
         }),
     }
