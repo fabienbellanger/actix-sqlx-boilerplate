@@ -13,6 +13,7 @@ pub struct User {
     pub password: String,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
+    #[serde(skip_serializing)]
     pub deleted_at: Option<DateTime<Utc>>,
 }
 

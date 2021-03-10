@@ -1,6 +1,7 @@
 //! JWT middleware module
 
 use crate::models::auth;
+use crate::repositories::user::UserRepository;
 use crate::AppState;
 use actix_service::{Service, Transform};
 use actix_web::{
@@ -16,9 +17,8 @@ use futures::{
     Future,
 };
 use sqlx::MySqlPool;
-use std::{cell::RefCell, pin::Pin, rc::Rc};
 use std::task::{Context, Poll};
-use crate::repositories::user::UserRepository;
+use std::{cell::RefCell, pin::Pin, rc::Rc};
 
 pub struct Authentication;
 
@@ -36,7 +36,7 @@ where
     type Future = Ready<Result<Self::Transform, Self::InitError>>;
 
     fn new_transform(&self, service: S) -> Self::Future {
-        ok(AuthenticationMiddleware { 
+        ok(AuthenticationMiddleware {
             service: Rc::new(RefCell::new(service)),
         })
     }
@@ -64,11 +64,11 @@ where
 
     fn call(&mut self, req: ServiceRequest) -> Self::Future {
         let mut service_cloned = self.service.clone();
-        let mut is_token_valid = false;
+        let mut is_authorized = false;
         let mut user_id = String::new();
 
         if Method::OPTIONS == *req.method() {
-            is_token_valid = true;
+            is_authorized = true;
         } else if let Some(app_state) = req.app_data::<Data<AppState>>() {
             let secret_key = &app_state.jwt_secret_key;
             let token = req
@@ -80,46 +80,33 @@ where
                     words.get(1).map(|w| w.trim())
                 });
 
-            is_token_valid = match token {
+            is_authorized = match token {
                 Some(token) => {
                     let claims = auth::JWT::parse(token.to_owned(), secret_key.to_owned());
                     match claims {
                         Ok(claims) => {
                             user_id = claims.user_id;
                             true
-                        },
+                        }
                         _ => false,
                     }
-                },
+                }
                 _ => false,
             };
         }
 
-        if is_token_valid {
-            Box::pin(async move {
+        Box::pin(async move {
+            if is_authorized {
                 // Check if user is still valid
-                let pool = req.app_data::<Data<MySqlPool>>();
-                let ok = match pool {
+                is_authorized = match req.app_data::<Data<MySqlPool>>() {
                     Some(pool) => UserRepository::get_by_id(pool.get_ref(), user_id).await.is_ok(),
                     None => false,
                 };
+            }
 
-                if ok {
-                    service_cloned.call(req).await
-                } else {
-                    Ok(req.into_response(
-                        HttpResponse::Unauthorized()
-                            .json(crate::errors::AppErrorMessage {
-                                code: StatusCode::UNAUTHORIZED.as_u16(),
-                                error: "Unauthorized".to_owned(),
-                                message: "Unauthorized".to_owned(),
-                            })
-                            .into_body(),
-                    ))
-                }
-            })
-        } else {
-            Box::pin(async move {
+            if is_authorized {
+                service_cloned.call(req).await
+            } else {
                 Ok(req.into_response(
                     HttpResponse::Unauthorized()
                         .json(crate::errors::AppErrorMessage {
@@ -129,7 +116,7 @@ where
                         })
                         .into_body(),
                 ))
-            })
-        }
+            }
+        })
     }
 }
