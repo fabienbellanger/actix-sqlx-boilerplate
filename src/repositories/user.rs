@@ -9,7 +9,7 @@ pub struct UserRepository;
 
 impl UserRepository {
     /// Returns a User if credentials are right
-    pub async fn login(pool: &MySqlPool, input: Login) -> Result<User, sqlx::Error> {
+    pub async fn login(pool: &MySqlPool, input: Login) -> Result<Option<User>, sqlx::Error> {
         let hashed_password = format!("{:x}", Sha512::digest(&input.password.as_bytes()));
         let result = sqlx::query!(
             r#"
@@ -22,23 +22,29 @@ impl UserRepository {
             input.email,
             hashed_password
         )
-        .fetch_one(pool)
+        .fetch_optional(pool)
         .await?;
 
-        Ok(User::init(
-            result.id,
-            result.password,
-            result.lastname,
-            result.firstname,
-            result.email,
-            Utc.from_utc_datetime(&result.created_at),
-            Utc.from_utc_datetime(&result.updated_at),
-            match result.deleted_at {
-                None => None,
-                Some(d) => Some(Utc.from_utc_datetime(&d)),
-            },
-        ))
+        match result {
+            Some(result) => Ok(Some(User::init(
+                result.id,
+                result.password,
+                result.lastname,
+                result.firstname,
+                result.email,
+                Utc.from_utc_datetime(&result.created_at),
+                Utc.from_utc_datetime(&result.updated_at),
+                match result.deleted_at {
+                    None => None,
+                    Some(d) => Some(Utc.from_utc_datetime(&d)),
+                },
+            ))),
+            None => Ok(None),
+        }
     }
+
+    /// Add a new user
+    pub fn create(pool: &MySqlPool, user: User) {}
 
     /// Returns all users not deleted
     pub fn get_all(pool: &MySqlPool) -> BoxStream<Result<Result<User, sqlx::Error>, sqlx::Error>> {
@@ -59,8 +65,7 @@ impl UserRepository {
     }
 
     /// Returns a user by its ID
-    /// TODO: faire comme get_all pour que cela fonctionne dans le middleware d'auth
-    pub async fn get_by_id(pool: &MySqlPool, id: String) -> Result<User, sqlx::Error> {
+    pub async fn get_by_id(pool: &MySqlPool, id: String) -> Result<Option<User>, sqlx::Error> {
         let result = sqlx::query!(
             r#"
                 SELECT * 
@@ -70,21 +75,24 @@ impl UserRepository {
             "#,
             id
         )
-        .fetch_one(pool)
+        .fetch_optional(pool)
         .await?;
 
-        Ok(User::init(
-            result.id,
-            result.password,
-            result.lastname,
-            result.firstname,
-            result.email,
-            Utc.from_utc_datetime(&result.created_at),
-            Utc.from_utc_datetime(&result.updated_at),
-            match result.deleted_at {
-                None => None,
-                Some(d) => Some(Utc.from_utc_datetime(&d)),
-            },
-        ))
+        match result {
+            Some(result) => Ok(Some(User::init(
+                result.id,
+                result.password,
+                result.lastname,
+                result.firstname,
+                result.email,
+                Utc.from_utc_datetime(&result.created_at),
+                Utc.from_utc_datetime(&result.updated_at),
+                match result.deleted_at {
+                    None => None,
+                    Some(d) => Some(Utc.from_utc_datetime(&d)),
+                },
+            ))),
+            None => Ok(None),
+        }
     }
 }

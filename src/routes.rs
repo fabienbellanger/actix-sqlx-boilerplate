@@ -13,7 +13,7 @@ pub fn api(cfg: &mut web::ServiceConfig) {
     cfg.service(
         web::scope("/v1")
             .route("/login", web::post().to(handlers::users::login))
-            // .route("/register", web::post().to(handlers::users::register))
+            .route("/register", web::post().to(handlers::users::register))
             .service(
                 web::scope("/users")
                     .wrap(crate::middlewares::auth::Authentication)

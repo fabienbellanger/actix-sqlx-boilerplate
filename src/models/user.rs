@@ -2,6 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 use sqlx::types::chrono::{DateTime, Utc};
+use uuid::Uuid;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct User {
@@ -40,6 +41,19 @@ impl User {
         }
     }
 
+    pub fn new(user: UserCreation) -> Self {
+        User {
+            id: Uuid::new_v4().to_string(),
+            lastname: user.lastname,
+            firstname: user.firstname,
+            email: user.email,
+            password: user.password,
+            created_at: Utc::now(),
+            updated_at: Utc::now(),
+            deleted_at: None,
+        }
+    }
+
     pub fn _fullname(&self) -> String {
         let mut fullname = String::new();
 
@@ -69,10 +83,18 @@ pub struct LoginResponse {
     pub expires_at: String,
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+pub struct UserCreation {
+    pub lastname: String,
+    pub firstname: String,
+    pub email: String,
+    pub password: String,
+}
+
 #[test]
 fn test_fullname() {
     let mut user = User {
-        id: String::from(""),
+        id: Uuid::new_v4().to_string(),
         lastname: String::from("Bellanger"),
         firstname: String::from("Fabien"),
         email: String::from(""),

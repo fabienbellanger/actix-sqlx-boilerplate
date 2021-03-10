@@ -99,7 +99,10 @@ where
             if is_authorized {
                 // Check if user is still valid
                 is_authorized = match req.app_data::<Data<MySqlPool>>() {
-                    Some(pool) => UserRepository::get_by_id(pool.get_ref(), user_id).await.is_ok(),
+                    Some(pool) => match UserRepository::get_by_id(pool.get_ref(), user_id).await {
+                        Ok(user) => user.is_some(),
+                        _ => false,
+                    },
                     None => false,
                 };
             }

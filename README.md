@@ -20,12 +20,28 @@ A simple Actix-web boilerplate using SQLx
     Response:
     ```json
     {
+        "id": "123e4567-e89b-12d3-a456-426614174000",
         "email": "valentil@gmail.com",
         "expires_at": "2021-03-08T21:23:21Z",
         "firstname": "Fabien",
         "lastname": "Bellanger",
         "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJpZCIsImV4cCI6MTYxNTIzODYwMSwiaWF0IjoxNjE1MjAyNjAxLCJuYmYiOjE2MTUyMDI2MDEsInVzZXJfaWQiOiJpZCIsInVzZXJfbGFzdG5hbWUiOiJCZWxsYW5nZXIiLCJ1c2VyX2ZpcnN0bmFtZSI6IkZhYmllbiIsInVzZXJfZW1haWwiOiJ2YWxlbnRpbEBnbWFpbC5jb20ifQ.-rsxfNLJNIUwT1iZNy1X_9W6Ed0qAdMhTWmDujYaBNS-EOh5eCU-bXC98z7mXmfYxhTB7Vz7332geelrtbh98g"
     }
+    ```
+
+- **[POST] `/v1/register`**: User registration
+    ```bash
+    http POST localhost:8089/v1/register email=test@gmail.com password=0000 lastname=Test firstname=Toto
+    ```
+    Response:
+    ```json
+    {
+        "id": "123e4567-e89b-12d3-a456-426614174000",
+        "email": "valentil@gmail.com",
+        "firstname": "Fabien",
+        "lastname": "Bellanger",
+        "created_at": "2021-03-05T11:29:55Z",
+        "updated_at": "2021-03-05T12:30:02Z"    }
     ```
 
 - **[GET] `/v1/users`**: Users list
