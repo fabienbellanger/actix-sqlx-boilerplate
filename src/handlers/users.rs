@@ -109,3 +109,20 @@ pub async fn delete(pool: web::Data<MySqlPool>, web::Path(id): web::Path<String>
         }),
     }
 }
+
+// Route: PUT "/v1/users/{id}"
+pub async fn update(
+    pool: web::Data<MySqlPool>,
+    web::Path(id): web::Path<String>,
+    form: web::Json<UserCreation>,
+) -> Result<impl Responder, AppError> {
+    UserRepository::update(pool.get_ref(), id.clone(), &form.0).await?;
+
+    let user = UserRepository::get_by_id(pool.get_ref(), id).await?;
+    match user {
+        Some(user) => Ok(HttpResponse::Ok().json(user)),
+        _ => Err(AppError::NotFound {
+            message: String::from("No user found"),
+        }),
+    }
+}

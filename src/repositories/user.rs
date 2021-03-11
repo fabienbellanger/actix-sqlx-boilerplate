@@ -1,4 +1,4 @@
-use crate::models::user::{Login, User};
+use crate::models::user::{Login, User, UserCreation};
 use chrono::{TimeZone, Utc};
 use futures::stream::BoxStream;
 use sha2::{Digest, Sha512};
@@ -115,7 +115,7 @@ impl UserRepository {
         }
     }
 
-    /// Deletes a user
+    /// Delete a user
     pub async fn delete(pool: &MySqlPool, id: String) -> Result<MySqlDone, sqlx::Error> {
         sqlx::query!(
             r#"
@@ -123,6 +123,26 @@ impl UserRepository {
                 SET deleted_at = ?
                 WHERE id = ?
             "#,
+            Some(Utc::now()),
+            id
+        )
+        .execute(pool)
+        .await
+    }
+
+    /// Update a user
+    pub async fn update(pool: &MySqlPool, id: String, user: &UserCreation) -> Result<MySqlDone, sqlx::Error> {
+        let hashed_password = format!("{:x}", Sha512::digest(&user.password.as_bytes()));
+        sqlx::query!(
+            r#"
+                UPDATE users
+                SET lastname = ?, firstname = ?, email = ?, password = ?, updated_at = ?
+                WHERE id = ?
+            "#,
+            user.lastname,
+            user.firstname,
+            user.email,
+            hashed_password,
             Some(Utc::now()),
             id
         )

@@ -19,7 +19,8 @@ pub fn api(cfg: &mut web::ServiceConfig) {
                     .wrap(crate::middlewares::auth::Authentication)
                     .route("", web::get().to(handlers::users::get_all))
                     .route("/{id}", web::get().to(handlers::users::get_by_id))
-                    .route("/{id}", web::delete().to(handlers::users::delete)),
+                    .route("/{id}", web::delete().to(handlers::users::delete))
+                    .route("/{id}", web::put().to(handlers::users::update)),
             ),
     );
 }
