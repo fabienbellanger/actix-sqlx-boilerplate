@@ -18,8 +18,8 @@ pub fn api(cfg: &mut web::ServiceConfig) {
                 web::scope("/users")
                     .wrap(crate::middlewares::auth::Authentication)
                     .route("", web::get().to(handlers::users::get_all))
-                    .route("/{id}", web::get().to(handlers::users::get_by_id)),
-                // .route("/{id}", web::delete().to(handlers::users::delete_one)),
+                    .route("/{id}", web::get().to(handlers::users::get_by_id))
+                    .route("/{id}", web::delete().to(handlers::users::delete)),
             ),
     );
 }

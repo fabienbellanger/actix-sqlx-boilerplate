@@ -6,13 +6,8 @@ use actix_web::{error, http::StatusCode};
 use color_eyre::Result;
 use serde_json::json;
 
-fn render_error<B>(
-    mut res: dev::ServiceResponse<B>,
-    code: u16,
-    error: String,
-    message: String,
-) -> ErrorHandlerResponse<B> {
-    let err = json!(crate::errors::AppErrorMessage { code, error, message });
+fn render_error<B>(mut res: dev::ServiceResponse<B>, code: u16, message: String) -> ErrorHandlerResponse<B> {
+    let err = json!(crate::errors::AppErrorMessage { code, message });
 
     res.request();
     res.headers_mut().insert(
@@ -30,7 +25,6 @@ pub fn render_401<B>(res: dev::ServiceResponse<B>) -> Result<ErrorHandlerRespons
         res,
         StatusCode::UNAUTHORIZED.as_u16(),
         String::from("Unauthorized"),
-        "Unauthorized".to_owned(),
     ))
 }
 
@@ -40,7 +34,6 @@ pub fn render_403<B>(res: dev::ServiceResponse<B>) -> Result<ErrorHandlerRespons
         res,
         StatusCode::FORBIDDEN.as_u16(),
         String::from("Forbidden"),
-        "Forbidden".to_owned(),
     ))
 }
 
@@ -50,7 +43,6 @@ pub fn render_408<B>(res: dev::ServiceResponse<B>) -> Result<ErrorHandlerRespons
         res,
         StatusCode::REQUEST_TIMEOUT.as_u16(),
         String::from("Request Time-out"),
-        "Request Time-out".to_owned(),
     ))
 }
 
@@ -60,7 +52,6 @@ pub fn render_502<B>(res: dev::ServiceResponse<B>) -> Result<ErrorHandlerRespons
         res,
         StatusCode::BAD_GATEWAY.as_u16(),
         String::from("Bad Gateway"),
-        "Bad Gateway".to_owned(),
     ))
 }
 
@@ -70,7 +61,6 @@ pub fn render_503<B>(res: dev::ServiceResponse<B>) -> Result<ErrorHandlerRespons
         res,
         StatusCode::SERVICE_UNAVAILABLE.as_u16(),
         String::from("Service Unavailable"),
-        "Service Unavailable".to_owned(),
     ))
 }
 
@@ -80,6 +70,5 @@ pub fn render_504<B>(res: dev::ServiceResponse<B>) -> Result<ErrorHandlerRespons
         res,
         StatusCode::GATEWAY_TIMEOUT.as_u16(),
         String::from("Gateway Time-out"),
-        "Gateway Time-out".to_owned(),
     ))
 }

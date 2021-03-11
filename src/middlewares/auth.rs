@@ -114,7 +114,6 @@ where
                     HttpResponse::Unauthorized()
                         .json(crate::errors::AppErrorMessage {
                             code: StatusCode::UNAUTHORIZED.as_u16(),
-                            error: "Unauthorized".to_owned(),
                             message: "Unauthorized".to_owned(),
                         })
                         .into_body(),

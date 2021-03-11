@@ -114,4 +114,19 @@ impl UserRepository {
             None => Ok(None),
         }
     }
+
+    /// Deletes a user
+    pub async fn delete(pool: &MySqlPool, id: String) -> Result<MySqlDone, sqlx::Error> {
+        sqlx::query!(
+            r#"
+                UPDATE users
+                SET deleted_at = ?
+                WHERE id = ?
+            "#,
+            Some(Utc::now()),
+            id
+        )
+        .execute(pool)
+        .await
+    }
 }

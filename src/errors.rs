@@ -9,7 +9,6 @@ use serde::Serialize;
 #[derive(Serialize)]
 pub struct AppErrorMessage {
     pub code: u16,
-    pub error: String,
     pub message: String,
 }
 
@@ -55,7 +54,6 @@ impl ResponseError for AppError {
             .set_header(header::CONTENT_TYPE, "application/json; charset=utf-8")
             .json(AppErrorMessage {
                 code: self.status_code().as_u16(),
-                error: self.name(),
                 message: self.to_string(),
             })
     }
