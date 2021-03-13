@@ -4,6 +4,10 @@ use tracing_bunyan_formatter::{BunyanFormattingLayer, JsonStorageLayer};
 use tracing_log::LogTracer;
 use tracing_subscriber::{layer::SubscriberExt, EnvFilter, Registry};
 
+// TODO: Try:
+// - https://docs.rs/tracing-subscriber/0.2.17/tracing_subscriber/fmt/index.html
+// - https://docs.rs/tracing-subscriber/0.2.17/tracing_subscriber/fmt/index.html
+
 /// Compose multiple layers into a `tracing`'s subscriber.
 ///
 /// # Implementation Notes
