@@ -5,7 +5,8 @@ use actix_web::web;
 
 /// Defines Web's routes
 pub fn web(cfg: &mut web::ServiceConfig) {
-    cfg.route("/health-check", web::get().to(handlers::web::health_check));
+    cfg.route("/health-check", web::get().to(handlers::web::health_check))
+        .route("/ws", web::get().to(handlers::ws::index));
 }
 
 /// Defines API's routes

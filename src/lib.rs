@@ -6,6 +6,7 @@ mod middlewares;
 mod models;
 mod repositories;
 mod routes;
+mod ws;
 
 extern crate chrono;
 extern crate serde;
