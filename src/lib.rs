@@ -15,13 +15,13 @@ extern crate serde;
 extern crate tracing;
 
 use crate::config::Config;
-use crate::logger::{get_subscriber, init_subscriber};
 use actix_cors::Cors;
 use actix_web::middleware::errhandlers::ErrorHandlers;
 use actix_web::{http, App, HttpServer};
 use actix_web_prom::PrometheusMetrics;
 use color_eyre::Result;
 use sqlx::{MySql, Pool};
+use tracing_actix_web::TracingLogger;
 
 #[derive(Debug, Clone)]
 pub struct AppState {
@@ -32,8 +32,8 @@ pub struct AppState {
 pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
     // Logger
     // ------
-    let subscriber = get_subscriber("actix-sqlx-boilerplate".into(), "info".into());
-    init_subscriber(subscriber);
+    let subscriber = logger::get_subscriber("actix-sqlx-boilerplate".into(), "info".into());
+    logger::init_subscriber(subscriber);
 
     // Initialisation du state de l'application
     // ----------------------------------------
@@ -55,6 +55,7 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
             .wrap(prometheus.clone())
             .wrap(middlewares::timer::Timer)
             .wrap(middlewares::request_id::RequestId)
+            // .wrap(TracingLogger)
             .wrap(
                 ErrorHandlers::new()
                     .handler(http::StatusCode::UNAUTHORIZED, handlers::errors::render_401)

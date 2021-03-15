@@ -137,7 +137,7 @@ sqlx migrate add -r <name>
 ## TODO list
 -  [x] Implement JWT auth
 -  [x] Faire la route /register
--  [ ] Mieux gérer la route /login quand le user est supprimé
+-  [x] Mieux gérer la route /login quand le user est supprimé
 -  [ ] Add custom Tracing formatter
 -  [ ] Add SQLx auto-migrate
 -  [ ] Regarder [actix_sqlx_mysql_user_crud](https://github.com/jamesjmeyer210/actix_sqlx_mysql_user_crud)

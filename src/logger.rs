@@ -6,17 +6,12 @@ use tracing_subscriber::{layer::SubscriberExt, EnvFilter, Registry};
 
 // TODO: Try:
 // - https://docs.rs/tracing-subscriber/0.2.17/tracing_subscriber/fmt/index.html
-// - https://docs.rs/tracing-subscriber/0.2.17/tracing_subscriber/fmt/index.html
+// - https://docs.rs/tracing-subscriber/0.2.17/tracing_subscriber/fmt/trait.FormatEvent.html
 
 /// Compose multiple layers into a `tracing`'s subscriber.
-///
-/// # Implementation Notes
-///
-/// We are using `impl Subscriber` as return type to avoid having to spell out the actual
-/// type of the returned subscriber, which is indeed quite complex.
-pub fn get_subscriber(name: String, env_filter: String) -> impl Subscriber + Sync + Send {
-    let env_filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new(env_filter));
-    let formatting_layer = BunyanFormattingLayer::new(name, std::io::stdout);
+pub fn get_subscriber(name: String, env_filter: String) -> impl Subscriber + Send + Sync {
+    let env_filter = EnvFilter::try_from_default_env().unwrap_or(EnvFilter::new(env_filter));
+    let formatting_layer = BunyanFormattingLayer::new(name.into(), std::io::stdout);
     Registry::default()
         .with(env_filter)
         .with(JsonStorageLayer)
@@ -26,7 +21,7 @@ pub fn get_subscriber(name: String, env_filter: String) -> impl Subscriber + Syn
 /// Register a subscriber as global default to process span data.
 ///
 /// It should only be called once!
-pub fn init_subscriber(subscriber: impl Subscriber + Sync + Send) {
+pub fn init_subscriber(subscriber: impl Subscriber + Send + Sync) {
     LogTracer::init().expect("Failed to set logger");
     set_global_default(subscriber).expect("Failed to set subscriber");
 }
