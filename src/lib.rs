@@ -12,16 +12,15 @@ extern crate chrono;
 extern crate serde;
 
 #[macro_use]
-extern crate tracing;
+extern crate log;
 
 use crate::config::Config;
 use actix_cors::Cors;
-use actix_web::middleware::errhandlers::ErrorHandlers;
+use actix_web::middleware::{errhandlers::ErrorHandlers, Logger};
 use actix_web::{http, App, HttpServer};
 use actix_web_prom::PrometheusMetrics;
 use color_eyre::Result;
 use sqlx::{MySql, Pool};
-use tracing_actix_web::TracingLogger;
 
 #[derive(Debug, Clone)]
 pub struct AppState {
@@ -32,8 +31,9 @@ pub struct AppState {
 pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
     // Logger
     // ------
-    let subscriber = logger::get_subscriber("actix-sqlx-boilerplate".into(), "info".into());
-    logger::init_subscriber(subscriber);
+    logger::init(settings.rust_log);
+    // let subscriber = logger::get_subscriber("actix-sqlx-boilerplate".into(), "info".into());
+    // logger::init_subscriber(subscriber);
 
     // Initialisation du state de l'application
     // ----------------------------------------
@@ -52,10 +52,10 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
         App::new()
             .data(db_pool.clone())
             .data(data.clone())
+            .wrap(Logger::new("%s | %r | %Ts | %{User-Agent}i | %a"))
             .wrap(prometheus.clone())
             .wrap(middlewares::timer::Timer)
             .wrap(middlewares::request_id::RequestId)
-            // .wrap(TracingLogger)
             .wrap(
                 ErrorHandlers::new()
                     .handler(http::StatusCode::UNAUTHORIZED, handlers::errors::render_401)

@@ -10,6 +10,6 @@ use color_eyre::Result;
 // ws://127.0.0.1:8089/ws
 pub async fn index(req: HttpRequest, stream: web::Payload) -> Result<HttpResponse, Error> {
     let resp = ws::start(WebSocket {}, &req, stream);
-    tracing::debug!("WS Client Response: {:?}", resp);
+    debug!("WS Client Response: {:?}", resp);
     resp
 }
