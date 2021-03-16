@@ -16,16 +16,16 @@ A simple Actix-web boilerplate using SQLx
 
 - **[POST] `/v1/login`**: Authentication
     ```bash
-    http POST localhost:8089/v1/login email=valentil@gmail.com password=0000
+    http POST localhost:8089/v1/login email=test@gmail.com password=0000
     ```
     Response code `200`:
     ```json
     {
         "id": "123e4567-e89b-12d3-a456-426614174000",
-        "email": "valentil@gmail.com",
+        "email": "test@gmail.com",
         "expires_at": "2021-03-08T21:23:21Z",
-        "firstname": "Fabien",
-        "lastname": "Bellanger",
+        "firstname": "Toto",
+        "lastname": "Test",
         "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJpZCIsImV4cCI6MTYxNTIzODYwMSwiaWF0IjoxNjE1MjAyNjAxLCJuYmYiOjE2MTUyMDI2MDEsInVzZXJfaWQiOiJpZCIsInVzZXJfbGFzdG5hbWUiOiJCZWxsYW5nZXIiLCJ1c2VyX2ZpcnN0bmFtZSI6IkZhYmllbiIsInVzZXJfZW1haWwiOiJ2YWxlbnRpbEBnbWFpbC5jb20ifQ.-rsxfNLJNIUwT1iZNy1X_9W6Ed0qAdMhTWmDujYaBNS-EOh5eCU-bXC98z7mXmfYxhTB7Vz7332geelrtbh98g"
     }
     ```
@@ -38,9 +38,9 @@ A simple Actix-web boilerplate using SQLx
     ```json
     {
         "id": "123e4567-e89b-12d3-a456-426614174000",
-        "email": "valentil@gmail.com",
-        "firstname": "Fabien",
-        "lastname": "Bellanger",
+        "email": "test@gmail.com",
+        "firstname": "Toto",
+        "lastname": "Test",
         "created_at": "2021-03-05T11:29:55Z",
         "updated_at": "2021-03-05T12:30:02Z"
     }
@@ -55,9 +55,9 @@ A simple Actix-web boilerplate using SQLx
     [
         {
             "id": "123e4567-e89b-12d3-a456-426614174000",
-            "lastname": "Bellanger",
-            "firstname": "Fabien",
-            "email": "valentil@gmail.com",
+            "lastname": "Test",
+            "firstname": "Toto",
+            "email": "test@gmail.com",
             "created_at": "2021-03-05T11:29:55Z",
             "updated_at": "2021-03-05T12:30:02Z"
         }
@@ -72,9 +72,9 @@ A simple Actix-web boilerplate using SQLx
     ```json
     {
         "id": "123e4567-e89b-12d3-a456-426614174000",
-        "lastname": "Bellanger",
-        "firstname": "Fabien",
-        "email": "valentil@gmail.com",
+        "lastname": "Test",
+        "firstname": "Toto",
+        "email": "test@gmail.com",
         "created_at": "2021-03-05T11:29:55Z",
         "updated_at": "2021-03-05T12:30:02Z"
     }
@@ -82,15 +82,15 @@ A simple Actix-web boilerplate using SQLx
 
 - **[PUT] `/v1/users/{id}`**: Update user
     ```bash
-    http PUT localhost:8089/v1/users/123e4567-e89b-12d3-a456-426614174000 "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjNlNDU2Ny1lODliLTEyZDMtYTQ1Ni00MjY2MTQxNzQwMDAiLCJleHAiOjE2MTU1NDk2OTksImlhdCI6MTYxNTQ2MzI5OSwibmJmIjoxNjE1NDYzMjk5LCJ1c2VyX2lkIjoiMTIzZTQ1NjctZTg5Yi0xMmQzLWE0NTYtNDI2NjE0MTc0MDAwIiwidXNlcl9sYXN0bmFtZSI6ImM2MDAxZDViMmFjM2RmMzE0MjA0YThmOWQ3YTAwZTE1MDNjOWFiYTBmZDQ1Mzg2NDVkZTRiZjRjYzdlMjU1NWNmZTlmZjlkMDIzNmJmMzI3ZWQzZTkwNzg0OWE5OGRmNGQzMzBjNGJlYTU1MTAxN2Q0NjViNGMxZDliODBiY2IwIiwidXNlcl9maXJzdG5hbWUiOiJCZWxsYW5nZXIiLCJ1c2VyX2VtYWlsIjoiRmFiaWVuIn0.EajIFTzXLVjlaefDTeyoC5NKfz_MaPAhIIV4AG2cUwRE8tB35HecyJJukHk0kQXOJyMllgahttV2qpk6wGgD3g" lastname="Bellanger" firstname="Lucie" email="valentil@gmail.com" password="1111"
+    http PUT localhost:8089/v1/users/123e4567-e89b-12d3-a456-426614174000 "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjNlNDU2Ny1lODliLTEyZDMtYTQ1Ni00MjY2MTQxNzQwMDAiLCJleHAiOjE2MTU1NDk2OTksImlhdCI6MTYxNTQ2MzI5OSwibmJmIjoxNjE1NDYzMjk5LCJ1c2VyX2lkIjoiMTIzZTQ1NjctZTg5Yi0xMmQzLWE0NTYtNDI2NjE0MTc0MDAwIiwidXNlcl9sYXN0bmFtZSI6ImM2MDAxZDViMmFjM2RmMzE0MjA0YThmOWQ3YTAwZTE1MDNjOWFiYTBmZDQ1Mzg2NDVkZTRiZjRjYzdlMjU1NWNmZTlmZjlkMDIzNmJmMzI3ZWQzZTkwNzg0OWE5OGRmNGQzMzBjNGJlYTU1MTAxN2Q0NjViNGMxZDliODBiY2IwIiwidXNlcl9maXJzdG5hbWUiOiJCZWxsYW5nZXIiLCJ1c2VyX2VtYWlsIjoiRmFiaWVuIn0.EajIFTzXLVjlaefDTeyoC5NKfz_MaPAhIIV4AG2cUwRE8tB35HecyJJukHk0kQXOJyMllgahttV2qpk6wGgD3g" lastname="Test" firstname="Tutu" email="test@gmail.com" password="1111"
     ```
     Response code `200`:
     ```json
     {
         "id": "123e4567-e89b-12d3-a456-426614174000",
-        "lastname": "Bellanger",
-        "firstname": "Lucie",
-        "email": "valentil@gmail.com",
+        "lastname": "Test",
+        "firstname": "Tutu",
+        "email": "test@gmail.com",
         "created_at": "2021-03-05T11:29:55Z",
         "updated_at": "2021-03-06T12:30:02Z"
     }
@@ -123,7 +123,7 @@ $ drill --benchmark drill.yml --stats --quiet
 ## SQLx
 sqlx repository: [Github](https://github.com/launchbadge/sqlx)
 
-**TODO:** Passer à sqlx 0.5 quand actix-web passera en 4.0
+**TODO:** Upgrade to sqlx 0.5 when actix-web upgraded in 4.0
 
 ### sqlx-cli
 sqlx-cli repository: [Github](https://github.com/launchbadge/sqlx/tree/master/sqlx-cli)
@@ -135,9 +135,14 @@ sqlx migrate add -r <name>
 ```
 
 ## TODO list
--  [x] Implement JWT auth
--  [x] Faire la route /register
+-  [x] Implement JWT authentication
+-  [x] Add `/register` route
 -  [x] Mieux gérer la route /login quand le user est supprimé
--  [ ] Add SQLx auto-migrate
--  [ ] Regarder [actix_sqlx_mysql_user_crud](https://github.com/jamesjmeyer210/actix_sqlx_mysql_user_crud)
--  [ ] Regarder [actixweb-sqlx-jwt](https://github.com/biluohc/actixweb-sqlx-jwt/blob/master/src/middlewares/auth.rs)
+-  [ ] Add SQLx auto-migrate. Done, but does not work with sqlx 0.4: 
+    ```
+    Error: 
+    0: while executing migrations: error returned from database: 1062 (23000): Duplicate entry '20210316155055' for key 'PRIMARY'
+    1: error returned from database: 1062 (23000): Duplicate entry '20210316155055' for key 'PRIMARY'
+    ```
+-  [ ] Watch [actix_sqlx_mysql_user_crud](https://github.com/jamesjmeyer210/actix_sqlx_mysql_user_crud)
+-  [ ] Watch [actixweb-sqlx-jwt](https://github.com/biluohc/actixweb-sqlx-jwt/blob/master/src/middlewares/auth.rs)

@@ -65,7 +65,6 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
                     .handler(http::StatusCode::SERVICE_UNAVAILABLE, handlers::errors::render_503)
                     .handler(http::StatusCode::GATEWAY_TIMEOUT, handlers::errors::render_504),
             )
-            // .wrap(Logger::new("%s | %r | %Ts | %{User-Agent}i | %a"))
             .wrap(
                 Cors::new()
                     // .allowed_origin("*")

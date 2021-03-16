@@ -14,6 +14,7 @@ pub struct Config {
     pub jwt_secret_key: String,
     pub jwt_lifetime: i64,
     pub database_url: String,
+    pub database_auto_migration: bool,
 }
 
 impl Config {
