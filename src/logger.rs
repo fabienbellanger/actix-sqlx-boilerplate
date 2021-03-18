@@ -48,6 +48,4 @@ pub fn init(level: String) {
         })
         .filter(None, level.to_level_filter())
         .init();
-
-    info!("Logger configuration OK");
 }

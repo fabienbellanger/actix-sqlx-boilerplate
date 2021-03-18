@@ -32,8 +32,6 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
     // Logger
     // ------
     logger::init(settings.rust_log);
-    // let subscriber = logger::get_subscriber("actix-sqlx-boilerplate".into(), "info".into());
-    // logger::init_subscriber(subscriber);
 
     // Initialisation du state de l'application
     // ----------------------------------------

@@ -1,5 +1,6 @@
 //! User model module
 
+use actix_web_validator::Validate;
 use serde::{Deserialize, Serialize};
 use sqlx::types::chrono::{DateTime, Utc};
 use uuid::Uuid;
@@ -67,27 +68,32 @@ impl User {
     }
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Validate)]
 pub struct Login {
+    #[validate(email)]
     pub email: String,
+    #[validate(length(min = 8))]
     pub password: String,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Validate)]
 pub struct LoginResponse {
     pub id: String,
     pub lastname: String,
     pub firstname: String,
+    #[validate(email)]
     pub email: String,
     pub token: String,
     pub expires_at: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Validate)]
 pub struct UserCreation {
     pub lastname: String,
     pub firstname: String,
+    #[validate(email)]
     pub email: String,
+    #[validate(length(min = 8))]
     pub password: String,
 }
 

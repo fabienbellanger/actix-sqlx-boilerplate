@@ -1,9 +1,12 @@
+//! API users handlers module
+
 use crate::errors::AppError;
 use crate::models::auth::JWT;
 use crate::models::user::{Login, LoginResponse, User, UserCreation};
 use crate::repositories::user::UserRepository;
 use crate::AppState;
 use actix_web::{http::StatusCode, web, HttpResponse, Responder};
+use actix_web_validator::Json;
 use chrono::{DateTime, NaiveDateTime, SecondsFormat, Utc};
 use futures::TryStreamExt;
 use sqlx::{Done, MySqlPool};
@@ -12,7 +15,7 @@ use sqlx::{Done, MySqlPool};
 pub async fn login(
     pool: web::Data<MySqlPool>,
     data: web::Data<AppState>,
-    form: web::Json<Login>,
+    form: Json<Login>,
 ) -> Result<impl Responder, AppError> {
     let user = UserRepository::login(pool.get_ref(), form.into_inner()).await?;
 
@@ -53,8 +56,7 @@ pub async fn login(
 }
 
 // Route: POST "/v1/register"
-// TODO: Make a validation of UserCreation fileds
-pub async fn register(pool: web::Data<MySqlPool>, form: web::Json<UserCreation>) -> Result<impl Responder, AppError> {
+pub async fn register(pool: web::Data<MySqlPool>, form: Json<UserCreation>) -> Result<impl Responder, AppError> {
     let mut user = User::new(form.0);
     let result = UserRepository::create(pool.get_ref(), &mut user).await;
 
@@ -114,7 +116,7 @@ pub async fn delete(pool: web::Data<MySqlPool>, web::Path(id): web::Path<String>
 pub async fn update(
     pool: web::Data<MySqlPool>,
     web::Path(id): web::Path<String>,
-    form: web::Json<UserCreation>,
+    form: Json<UserCreation>,
 ) -> Result<impl Responder, AppError> {
     UserRepository::update(pool.get_ref(), id.clone(), &form.0).await?;
 
