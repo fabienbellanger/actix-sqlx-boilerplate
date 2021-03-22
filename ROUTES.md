@@ -12,6 +12,12 @@ A simple Actix-web boilerplate using SQLx
     ```
     Response code `200`
 
+- `GET` `/ws-clinet`: Web Sockets client
+    ```bash
+    http GET localhost:8089/ws-client
+    ```
+    Response code `200`
+
 ### API
 
 #### Authentication / Registration

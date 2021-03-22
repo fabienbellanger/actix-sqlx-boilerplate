@@ -33,8 +33,8 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
     // ------
     logger::init(settings.rust_log);
 
-    // Initialisation du state de l'application
-    // ----------------------------------------
+    // Init application state
+    // ----------------------
     let data = AppState {
         jwt_secret_key: settings.jwt_secret_key.clone(),
         jwt_lifetime: settings.jwt_lifetime,
