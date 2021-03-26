@@ -61,7 +61,7 @@ impl User {
         if !self.firstname.is_empty() {
             fullname.push_str(&self.firstname);
         }
-        fullname.push_str(" ");
+        fullname.push(' ');
         fullname.push_str(&self.lastname);
 
         fullname.trim().to_owned()

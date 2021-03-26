@@ -1,4 +1,4 @@
-//! JWT module
+//! Json Web Token module
 
 use chrono::Utc;
 use color_eyre::Result;
@@ -17,9 +17,9 @@ pub struct Claims {
     pub user_email: String,
 }
 
-pub struct JWT {}
+pub struct Jwt {}
 
-impl JWT {
+impl Jwt {
     // Generate JWT
     pub fn generate(
         user_id: String,

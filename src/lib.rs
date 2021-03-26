@@ -2,7 +2,7 @@ pub mod config;
 mod errors;
 pub mod handlers;
 mod logger;
-mod middlewares;
+pub mod middlewares;
 mod models;
 mod repositories;
 mod routes;
@@ -50,10 +50,10 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
         App::new()
             .data(db_pool.clone())
             .data(data.clone())
-            .wrap(Logger::new("%s | %r | %Ts | %{User-Agent}i | %a"))
-            .wrap(prometheus.clone())
+            .wrap(middlewares::request_id::RequestIdService)
             .wrap(middlewares::timer::Timer)
-            .wrap(middlewares::request_id::RequestId)
+            .wrap(Logger::new("%s | %r | %Ts | %{User-Agent}i | %a | %{x-request-id}o"))
+            .wrap(prometheus.clone())
             .wrap(
                 ErrorHandlers::new()
                     .handler(http::StatusCode::UNAUTHORIZED, handlers::errors::render_401)

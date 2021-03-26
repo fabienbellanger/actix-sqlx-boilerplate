@@ -60,6 +60,7 @@ cargo run --open --no-deps --document-private-items
 -  [x] Implement JWT authentication
 -  [x] Add `/register` route
 -  [x] Mieux gérer la route /login quand le user est supprimé
+-  [x] Implement FromRequest trait to retrieve the request ID in an handler
 -  [ ] Add SQLx auto-migrate. Done, but does not work with sqlx 0.4: 
     ```
     Error: 

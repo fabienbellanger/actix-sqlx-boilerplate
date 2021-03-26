@@ -1,7 +1,7 @@
 //! API users handlers module
 
 use crate::errors::AppError;
-use crate::models::auth::JWT;
+use crate::models::auth::Jwt;
 use crate::models::user::{Login, LoginResponse, User, UserCreation};
 use crate::repositories::user::UserRepository;
 use crate::AppState;
@@ -26,7 +26,7 @@ pub async fn login(
             // -------------------
             let secret = &data.jwt_secret_key;
             let jwt_lifetime = data.jwt_lifetime;
-            let token = JWT::generate(
+            let token = Jwt::generate(
                 user.id.to_owned(),
                 user.lastname.to_owned(),
                 user.firstname.to_owned(),

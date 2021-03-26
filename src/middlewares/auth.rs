@@ -1,4 +1,4 @@
-//! JWT middleware module
+//! Json Web Token middleware module
 
 use crate::models::auth;
 use crate::repositories::user::UserRepository;
@@ -82,7 +82,7 @@ where
 
             is_authorized = match token {
                 Some(token) => {
-                    let claims = auth::JWT::parse(token.to_owned(), secret_key.to_owned());
+                    let claims = auth::Jwt::parse(token.to_owned(), secret_key.to_owned());
                     match claims {
                         Ok(claims) => {
                             user_id = claims.user_id;
