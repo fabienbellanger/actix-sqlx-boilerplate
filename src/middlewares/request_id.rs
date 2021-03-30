@@ -44,21 +44,18 @@ impl RequestIdMessage for RequestId {
     }
 }
 
-#[derive(Clone)]
-struct RequestIdItem(String);
-
 impl<T> RequestIdMessage for T
 where
     T: HttpMessage,
 {
     fn id(&self) -> String {
-        if let Some(id) = self.extensions().get::<RequestIdItem>() {
-            return id.0.clone();
+        if let Some(id) = self.extensions().get::<String>() {
+            return id.clone();
         }
 
         let id: String = Uuid::new_v4().to_string();
 
-        self.extensions_mut().insert(RequestIdItem(id.clone()));
+        self.extensions_mut().insert(id.clone());
 
         id
     }
