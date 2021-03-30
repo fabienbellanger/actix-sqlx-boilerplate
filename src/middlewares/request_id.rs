@@ -124,7 +124,7 @@ where
     }
 
     fn call(&mut self, req: ServiceRequest) -> Self::Future {
-        let request_id = req.id();
+        let request_id = req.id(); // ie. RequestID(req).id();
         let fut = self.service.call(req);
 
         Box::pin(async move {
