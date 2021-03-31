@@ -8,10 +8,16 @@ use askama_actix::{Template, TemplateIntoResponse};
 #[template(path = "ws.html")]
 struct WsTemplate {}
 
-// Route: GET "/health_check"
+// Route: GET "/health-check"
 pub async fn health_check(request_id: RequestId) -> Result<impl Responder, AppError> {
     debug!("Request ID: {}", request_id.get());
     Ok(HttpResponse::Ok().finish())
+}
+
+// Route: GET "/async-process"
+pub async fn async_process() -> Result<HttpResponse, AppError> {
+    todo!("Try with an actor");
+    // Ok(HttpResponse::Ok().finish())
 }
 
 // Route: GET "/ws-client"
