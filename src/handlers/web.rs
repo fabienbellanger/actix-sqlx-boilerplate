@@ -4,6 +4,8 @@ use crate::{errors::AppError, middlewares::request_id::RequestId};
 use actix::Arbiter;
 use actix_web::{HttpResponse, Responder};
 use askama_actix::{Template, TemplateIntoResponse};
+use std::time::Duration;
+use tokio::time::delay_for;
 
 #[derive(Template)]
 #[template(path = "ws.html")]
@@ -15,22 +17,19 @@ pub async fn health_check(request_id: RequestId) -> Result<impl Responder, AppEr
     Ok(HttpResponse::Ok().finish())
 }
 
+// Long task that waits for 5s
 async fn long_task() {
-    debug!("INSIDE LONG TASK...");
+    delay_for(Duration::from_secs(5)).await;
+    debug!("Inside long task...");
 }
 
 // Route: GET "/async-process"
 pub async fn async_process() -> Result<HttpResponse, AppError> {
-    debug!("BEFORE LONG TASK...");
+    debug!("Before long task...");
     Arbiter::spawn(long_task());
-    debug!("AFTER LONG TASK...");
+    debug!("After long task...");
 
-    debug!("BEFORE LONG TASK...");
-    Arbiter::spawn_fn(|| async {
-        debug!("INSIDE CLOSURE LONG TASK...");
-    });
-    debug!("AFTER LONG TASK...");
-
+    // Immediate response
     Ok(HttpResponse::Ok().finish())
 }
 
