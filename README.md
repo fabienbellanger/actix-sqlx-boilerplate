@@ -48,12 +48,12 @@ sqlx migrate revert
 ## Documentation
 Run:
 ```bash
-cargo run --open --no-deps
+cargo doc --open --no-deps
 ```
 
 Run with private items:
 ```bash
-cargo run --open --no-deps --document-private-items
+cargo doc --open --no-deps --document-private-items
 ```
 
 ## TODO list

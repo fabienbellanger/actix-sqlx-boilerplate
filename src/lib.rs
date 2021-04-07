@@ -15,6 +15,8 @@ extern crate serde;
 extern crate log;
 
 use crate::config::Config;
+use crate::ws::chat::server;
+use actix::Actor;
 use actix_cors::Cors;
 use actix_web::middleware::{errhandlers::ErrorHandlers, Logger};
 use actix_web::{http, App, HttpServer};
@@ -44,12 +46,17 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
     // ----------
     let prometheus = PrometheusMetrics::new("api", Some("/metrics"), None);
 
+    // Start chat server actor
+    // -----------------------
+    let chat_server = server::ChatServer::new().start();
+
     // Start server
     // ------------
     HttpServer::new(move || {
         App::new()
             .data(db_pool.clone())
             .data(data.clone())
+            .data(chat_server.clone())
             .wrap(middlewares::request_id::RequestIdService)
             .wrap(middlewares::timer::Timer)
             .wrap(Logger::new("%s | %r | %Ts | %{User-Agent}i | %a | %{x-request-id}o"))

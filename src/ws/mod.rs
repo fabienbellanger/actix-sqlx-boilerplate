@@ -1,5 +1,8 @@
 //! Web Socket module
 
+// Module for chat example
+pub mod chat;
+
 use actix::{Actor, ActorContext, StreamHandler};
 use actix_web_actors::ws;
 use color_eyre::Result;
