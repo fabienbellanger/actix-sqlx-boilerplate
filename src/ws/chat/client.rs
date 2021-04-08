@@ -96,6 +96,11 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for WsChatSession {
             }
             ws::Message::Text(text) => {
                 let m = text.trim();
+
+                if m.is_empty() {
+                    return ();
+                }
+
                 // we check for /sss type of messages
                 if m.starts_with('/') {
                     let v: Vec<&str> = m.splitn(2, ' ').collect();
