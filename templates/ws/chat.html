@@ -127,10 +127,10 @@
             margin: 0;
             padding: 0.5em 0.5em 0.5em 0.5em;
             position: absolute;
-            top: calc(120px + 0.5em);
+            top: calc(120px + 1em);
             left: 0.5em;
             right: 0.5em;
-            bottom: 3em;
+            bottom: 4em;
             overflow: auto;
         }
 
@@ -147,13 +147,17 @@
             width: 100%;
             overflow: hidden;
         }
+
+        .btn {
+            padding: 0.5em;
+        }
     </style>
 </head>
 
 <body>
     <div style="padding: 0.5em">
         <h1>Chat!</h3>
-        <button id="btn_connect">Connect</button>
+        <button id="btn_connect" class="btn">Connect</button>
         Status: <span id="span_status">disconnected</span>
     </div>
 
@@ -161,7 +165,7 @@
 
     <div id="form">
         <input id="input_text" type="text" />
-        <input id="btn_send" type="button" value="Send" />
+        <input id="btn_send" class="btn" type="button" value="Send" />
     </div>
 </body>
 </html>

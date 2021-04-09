@@ -6,15 +6,14 @@ A simple Actix-web boilerplate using SQLx
 [Documentation](ROUTES.md)
   
 ## Logs
-Use of [bunyan](https://crates.io/crates/bunyan)
 ```bash
-cargo run | bunyan
+cargo run --bin api
 ```
 
 ## Cargo watch
 Usage:
 ```bash
-cargo watch -x 'run --bin actix-web'
+cargo watch -x 'run --bin api'
 ```
 
 ## Benchmark

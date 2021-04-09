@@ -6,6 +6,7 @@ name = "actix_sqlx_boilerplate"
 readme = "README.md"
 repository = "https://github.com/fabienbellanger/actix-sqlx-boilerplate"
 version = "0.1.0"
+# default-bin = "api"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -13,8 +14,8 @@ version = "0.1.0"
 path = "src/lib.rs"
 
 [[bin]]
-name = "actix-web"
-path = "src/main.rs"
+name = "api"
+path = "src/bin/api.rs"
 
 [dependencies]
 actix = "0.10"
