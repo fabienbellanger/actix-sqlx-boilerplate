@@ -18,6 +18,7 @@ use crate::config::Config;
 use crate::ws::chat::server;
 use actix::Actor;
 use actix_cors::Cors;
+use actix_files as fs;
 use actix_web::middleware::{errhandlers::ErrorHandlers, Logger};
 use actix_web::{http, App, HttpServer};
 use actix_web_prom::PrometheusMetrics;
@@ -82,6 +83,7 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
             )
             .configure(routes::web)
             .configure(routes::api)
+            .service(fs::Files::new("/assets", "./static"))
     })
     .bind(format!("{}:{}", settings.server_url, settings.server_port))?
     .run()
