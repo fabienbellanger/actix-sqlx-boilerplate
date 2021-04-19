@@ -60,8 +60,8 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
             .data(chat_server.clone())
             .wrap(middlewares::request_id::RequestIdService)
             .wrap(middlewares::timer::Timer)
+            .wrap(prometheus.clone()) // Put before logger (issue #39)
             .wrap(Logger::new("%s | %r | %Ts | %{User-Agent}i | %a | %{x-request-id}o"))
-            .wrap(prometheus.clone())
             .wrap(
                 ErrorHandlers::new()
                     .handler(http::StatusCode::UNAUTHORIZED, handlers::errors::render_401)
