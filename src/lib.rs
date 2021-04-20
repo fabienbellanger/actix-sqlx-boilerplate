@@ -1,3 +1,4 @@
+mod actors;
 pub mod config;
 mod errors;
 pub mod handlers;
@@ -51,6 +52,10 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
     // -----------------------
     let chat_server = server::ChatServer::new().start();
 
+    // Test of actor
+    // -------------
+    let string_list_actor = actors::list::StringList::default().start();
+
     // Start server
     // ------------
     HttpServer::new(move || {
@@ -58,6 +63,7 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
             .data(db_pool.clone())
             .data(data.clone())
             .data(chat_server.clone())
+            .data(string_list_actor.clone())
             .wrap(middlewares::request_id::RequestIdService)
             .wrap(middlewares::timer::Timer)
             .wrap(prometheus.clone()) // Put before logger (issue #39)

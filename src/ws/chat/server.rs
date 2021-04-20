@@ -78,9 +78,7 @@ impl ChatServer {
             rng: rand::thread_rng(),
         }
     }
-}
 
-impl ChatServer {
     /// Send message to all users in the room
     fn send_message(&self, room: &str, message: &str, skip_id: usize) {
         if let Some(sessions) = self.rooms.get(room) {

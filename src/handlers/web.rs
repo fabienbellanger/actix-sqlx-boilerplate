@@ -1,15 +1,32 @@
 //! Web handlers module
 
+use crate::actors::list::*;
 use crate::{errors::AppError, middlewares::request_id::RequestId};
+use actix::Addr;
 use actix::Arbiter;
-use actix_web::{HttpResponse, Responder};
+use actix_web::{web, HttpResponse, Responder};
 use std::time::Duration;
 use tokio::time::delay_for;
 
 // Route: GET "/health-check"
 pub async fn health_check(request_id: RequestId) -> Result<impl Responder, AppError> {
     debug!("Request ID: {}", request_id.get());
+
     Ok(HttpResponse::Ok().finish())
+}
+
+// Route: GET "/list-actor/{item}"
+pub async fn list_actor(
+    web::Path(item): web::Path<String>,
+    list: web::Data<Addr<StringList>>,
+) -> Result<impl Responder, AppError> {
+    // Send a message to the actor to push String in the list
+    list.send(AddMessage(item)).await?;
+
+    // Send a message to the actor to get string list
+    let l = list.send(StringListMessage {}).await?;
+
+    Ok(HttpResponse::Ok().json(l))
 }
 
 // Long task that waits for 5s

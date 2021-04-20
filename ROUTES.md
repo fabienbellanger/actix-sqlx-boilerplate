@@ -18,6 +18,12 @@ A simple Actix-web boilerplate using SQLx
     ```
     Response code `200`
 
+- `GET` `/metrics`: Prometheus metrics
+    ```bash
+    http GET localhost:8089/metrics
+    ```
+    Response code `200`
+
 ### API
 
 #### Authentication / Registration

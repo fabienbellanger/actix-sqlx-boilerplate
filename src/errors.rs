@@ -1,5 +1,6 @@
 //! Custom error module
 
+use actix::MailboxError;
 use actix_http::ResponseBuilder;
 use actix_web::{error::ResponseError, http::header, http::StatusCode, HttpResponse};
 use derive_more::{Display, Error};
@@ -39,6 +40,8 @@ impl AppError {
     }
 }
 
+// Actix-web errors
+// ----------------
 impl ResponseError for AppError {
     fn status_code(&self) -> StatusCode {
         match *self {
@@ -59,11 +62,25 @@ impl ResponseError for AppError {
     }
 }
 
+// SQLx errors
+// -----------
 impl From<sqlx::Error> for AppError {
     fn from(error: sqlx::Error) -> Self {
         match error {
             _ => Self::InternalError {
                 message: "Database Error".to_owned(),
+            },
+        }
+    }
+}
+
+// Actix errors
+// ------------
+impl From<MailboxError> for AppError {
+    fn from(error: MailboxError) -> Self {
+        match error {
+            _ => Self::InternalError {
+                message: "Actor Error".to_owned(),
             },
         }
     }
