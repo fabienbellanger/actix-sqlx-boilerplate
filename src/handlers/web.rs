@@ -1,6 +1,6 @@
 //! Web handlers module
 
-use crate::actors::list::*;
+use crate::actors::cache::*;
 use crate::{errors::AppError, middlewares::request_id::RequestId};
 use actix::Addr;
 use actix::Arbiter;
@@ -15,18 +15,18 @@ pub async fn health_check(request_id: RequestId) -> Result<impl Responder, AppEr
     Ok(HttpResponse::Ok().finish())
 }
 
-// Route: GET "/list-actor/{item}"
-pub async fn list_actor(
+// Route: GET "/actor-cache/{item}"
+pub async fn actor_cache(
     web::Path(item): web::Path<String>,
-    list: web::Data<Addr<StringList>>,
+    list: web::Data<Addr<Cache>>,
 ) -> Result<impl Responder, AppError> {
     // Send a message to the actor to push String in the list
     list.send(AddMessage(item)).await?;
 
     // Send a message to the actor to get string list
-    let l = list.send(StringListMessage {}).await?;
+    let item = list.send(CacheMessage {}).await?;
 
-    Ok(HttpResponse::Ok().json(l))
+    Ok(HttpResponse::Ok().json(item))
 }
 
 // Long task that waits for 5s

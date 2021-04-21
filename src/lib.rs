@@ -54,7 +54,7 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
 
     // Test of actor
     // -------------
-    let string_list_actor = actors::list::StringList::default().start();
+    let cache_actor = actors::cache::Cache::default().start();
 
     // Start server
     // ------------
@@ -63,7 +63,7 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
             .data(db_pool.clone())
             .data(data.clone())
             .data(chat_server.clone())
-            .data(string_list_actor.clone())
+            .data(cache_actor.clone())
             .wrap(middlewares::request_id::RequestIdService)
             .wrap(middlewares::timer::Timer)
             .wrap(prometheus.clone()) // Put before logger (issue #39)

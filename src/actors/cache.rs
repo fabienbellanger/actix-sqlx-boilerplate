@@ -5,33 +5,33 @@ use actix::prelude::*;
 // Actor
 // =====
 #[derive(Debug)]
-pub struct StringList {
+pub struct Cache {
     pub list: Vec<String>,
 }
 
-impl Default for StringList {
+impl Default for Cache {
     fn default() -> Self {
         Self { list: Vec::new() }
     }
 }
 
-impl Actor for StringList {
+impl Actor for Cache {
     type Context = Context<Self>;
 }
 
 // Messages
 // ========
 #[derive(Debug)]
-pub struct StringListMessage;
+pub struct CacheMessage;
 
-impl Message for StringListMessage {
+impl Message for CacheMessage {
     type Result = Vec<String>;
 }
 
-impl Handler<StringListMessage> for StringList {
-    type Result = MessageResult<StringListMessage>;
+impl Handler<CacheMessage> for Cache {
+    type Result = MessageResult<CacheMessage>;
 
-    fn handle(&mut self, msg: StringListMessage, _ctx: &mut Context<Self>) -> Self::Result {
+    fn handle(&mut self, _msg: CacheMessage, _ctx: &mut Context<Self>) -> Self::Result {
         MessageResult(self.list.clone())
     }
 }
@@ -40,7 +40,7 @@ impl Handler<StringListMessage> for StringList {
 #[rtype(result = "()")]
 pub struct AddMessage(pub String);
 
-impl Handler<AddMessage> for StringList {
+impl Handler<AddMessage> for Cache {
     type Result = ();
 
     fn handle(&mut self, msg: AddMessage, _ctx: &mut Context<Self>) -> Self::Result {

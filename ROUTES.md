@@ -12,11 +12,29 @@ A simple Actix-web boilerplate using SQLx
     ```
     Response code `200`
 
-- `GET` `/ws-clinet`: Web Sockets client
+- `GET` `/ws-client`: Web Sockets client
     ```bash
     http GET localhost:8089/ws-client
     ```
     Response code `200`
+
+- `GET` `/ws-chat-client`: Chat Web Sockets client
+    ```bash
+    http GET localhost:8089/ws-chat-client
+    ```
+    Response code `200`
+
+- `GET` `/actor-cache`: Chat Web Sockets client
+    ```bash
+    http GET localhost:8089/actor-cache
+    ```
+    Response code `200`:
+    ```json
+    [
+        "toto",
+        "titi"
+    ]
+    ```
 
 - `GET` `/metrics`: Prometheus metrics
     ```bash
