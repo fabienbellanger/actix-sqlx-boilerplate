@@ -11,6 +11,7 @@ cargo run --bin api
 ```
 
 ## Cargo watch
+cargo-watch repository: [Github](https://github.com/passcod/cargo-watch)
 Usage:
 ```bash
 cargo watch -x 'run --bin api'

@@ -24,9 +24,9 @@ A simple Actix-web boilerplate using SQLx
     ```
     Response code `200`
 
-- `GET` `/actor-cache`: Chat Web Sockets client
+- `GET` `/actor-cache/{item}`: Chat Web Sockets client
     ```bash
-    http GET localhost:8089/actor-cache
+    http GET localhost:8089/actor-cache/{item}
     ```
     Response code `200`:
     ```json
