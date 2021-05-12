@@ -1,6 +1,19 @@
 use actix::prelude::*;
+use std::time::Duration;
+use tokio::time::interval;
 
 // https://github.com/fteychene/lottery-jug-rust/
+
+/// Launch cache loop
+pub async fn cache_loop(cache: Addr<Cache>, period: Duration) {
+    debug!("In cache loop...");
+    let mut interval = interval(period);
+    loop {
+        interval.tick().await;
+        let item = cache.send(CacheMessage).await;
+        debug!("==> In interval | cache = {:?}", item);
+    }
+}
 
 // Actor
 // =====

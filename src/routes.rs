@@ -11,7 +11,6 @@ pub fn web(cfg: &mut web::ServiceConfig) {
         .route("/ws-client", web::get().to(handlers::ws::ws_client))
         .route("/ws-chat-client", web::get().to(handlers::ws::ws_chat_client))
         .route("/ws", web::get().to(handlers::ws::index))
-        // .route("/ws-chat", web::get().to(handlers::ws::chat_route));
         .service(web::resource("/ws-chat/").to(handlers::ws::chat_route));
 }
 

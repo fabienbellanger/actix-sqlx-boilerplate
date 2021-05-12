@@ -17,7 +17,7 @@ extern crate log;
 
 use crate::config::Config;
 use crate::ws::chat::server;
-use actix::Actor;
+use actix::{Actor, Arbiter};
 use actix_cors::Cors;
 use actix_files as fs;
 use actix_web::middleware::{errhandlers::ErrorHandlers, Logger};
@@ -25,6 +25,7 @@ use actix_web::{http, App, HttpServer};
 use actix_web_prom::PrometheusMetrics;
 use color_eyre::Result;
 use sqlx::{MySql, Pool};
+use std::time::Duration;
 
 #[derive(Debug, Clone)]
 pub struct AppState {
@@ -55,6 +56,7 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
     // Test of actor
     // -------------
     let cache_actor = actors::cache::Cache::default().start();
+    Arbiter::spawn(actors::cache::cache_loop(cache_actor.clone(), Duration::from_secs(10)));
 
     // Start server
     // ------------

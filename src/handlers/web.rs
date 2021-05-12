@@ -31,7 +31,7 @@ pub async fn actor_cache(
 
 // Long task that waits for 5s
 async fn long_task() {
-    delay_for(Duration::from_secs(5)).await;
+    delay_for(Duration::from_secs(10)).await;
     debug!("Inside long task...");
 }
 
