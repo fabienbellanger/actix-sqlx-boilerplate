@@ -5,6 +5,7 @@ use env_logger::fmt::Color;
 use env_logger::Builder;
 use log::Level;
 use std::io::Write;
+use tracing_subscriber::{fmt, prelude::*, EnvFilter};
 
 /// Initialize logger
 pub fn init(level: String) {
@@ -47,5 +48,39 @@ pub fn init(level: String) {
             )
         })
         .filter(None, level.to_level_filter())
+        .init();
+}
+
+pub fn init_tracing(level: String) {
+    // let file_appender = tracing_appender::rolling::daily("./logs", "axtix-sqlx.log");
+    // let (non_blocking, _guard) = tracing_appender::non_blocking(file_appender);
+
+    // let subscriber = tracing_subscriber::registry()
+    //     // TODO: use level variable
+    //     .with(EnvFilter::from_default_env().add_directive(tracing::Level::TRACE.into()))
+    //     .with(fmt::Layer::new().with_writer(std::io::stdout));
+    // // .with(fmt::Layer::new().with_writer(non_blocking));
+    // tracing::subscriber::set_global_default(subscriber).expect("Unable to set a global collector");
+
+    // tracing_subscriber::fmt()
+    //     .json()
+    //     .with_max_level(tracing::Level::TRACE)
+    //     .with_current_span(false)
+    //     .with_timer(tracing_subscriber::fmt::time::ChronoLocal::with_format(String::from(
+    //         "%Y-%m-%dT%H:%M:%S",
+    //     )))
+    //     .init();
+
+    // TODO: Create own format layer
+    let fmt_layer = fmt::layer().with_target(true).with_level(true).with_timer(
+        tracing_subscriber::fmt::time::ChronoLocal::with_format(String::from("%Y-%m-%dT%H:%M:%S")),
+    );
+    let filter_layer = EnvFilter::try_from_default_env()
+        .or_else(|_| EnvFilter::try_new("info"))
+        .unwrap();
+
+    tracing_subscriber::registry()
+        .with(filter_layer)
+        .with(fmt_layer)
         .init();
 }

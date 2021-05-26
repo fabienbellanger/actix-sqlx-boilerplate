@@ -13,7 +13,7 @@ extern crate chrono;
 extern crate serde;
 
 #[macro_use]
-extern crate log;
+extern crate tracing;
 
 use crate::config::Config;
 use crate::ws::chat::server;
@@ -36,7 +36,10 @@ pub struct AppState {
 pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
     // Logger
     // ------
-    logger::init(settings.rust_log);
+    // logger::init(settings.rust_log);
+    logger::init_tracing("debug".to_owned());
+
+    tracing::error!("Tracing error");
 
     // Init application state
     // ----------------------
