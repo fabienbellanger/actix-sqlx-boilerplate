@@ -36,7 +36,7 @@ pub struct AppState {
 pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
     // Logger
     // ------
-    // logger::init(settings.rust_log);
+    //logger::init(settings.rust_log);
     logger::init_tracing("debug".to_owned());
 
     tracing::error!("Tracing error");
@@ -59,7 +59,7 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
     // Test of actor
     // -------------
     let cache_actor = actors::cache::Cache::default().start();
-    Arbiter::spawn(actors::cache::cache_loop(cache_actor.clone(), Duration::from_secs(60)));
+    Arbiter::spawn(actors::cache::cache_loop(cache_actor.clone(), Duration::from_secs(300)));
 
     // Start server
     // ------------

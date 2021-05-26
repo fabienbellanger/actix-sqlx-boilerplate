@@ -52,8 +52,8 @@ pub fn init(level: String) {
 }
 
 pub fn init_tracing(level: String) {
-    // let file_appender = tracing_appender::rolling::daily("./logs", "axtix-sqlx.log");
-    // let (non_blocking, _guard) = tracing_appender::non_blocking(file_appender);
+    let file_appender = tracing_appender::rolling::daily("./logs", "axtix-sqlx.log");
+    let (non_blocking, _guard) = tracing_appender::non_blocking(file_appender);
 
     // let subscriber = tracing_subscriber::registry()
     //     // TODO: use level variable
@@ -80,7 +80,66 @@ pub fn init_tracing(level: String) {
         .unwrap();
 
     tracing_subscriber::registry()
+    .with(EnvFilter::from_default_env().add_directive(tracing::Level::TRACE.into()))
+        .with(fmt::Layer::new().with_writer(non_blocking))
         .with(filter_layer)
         .with(fmt_layer)
         .init();
+}
+
+use tracing_core::{Subscriber, Event};
+use tracing_subscriber::fmt::{FormatEvent, FormatFields, FmtContext, FormattedFields};
+use tracing_subscriber::registry::LookupSpan;
+
+struct MyFormatter;
+
+impl<S, N> FormatEvent<S, N> for MyFormatter
+where
+    S: Subscriber + for<'a> LookupSpan<'a>,
+    N: for<'a> FormatFields<'a> + 'static,
+{
+    fn format_event(
+        &self,
+        ctx: &FmtContext<'_, S, N>,
+        writer: &mut dyn std::fmt::Write,
+        event: &Event<'_>,
+    ) -> std::fmt::Result {
+        // Write level and target
+        let level = *event.metadata().level();
+        let target = event.metadata().target();
+        write!(
+            writer,
+            "{} {}: ",
+            level,
+            target,
+        )?;
+
+        // Write spans and fields of each span
+        ctx.visit_spans(|span| {
+            write!(writer, "{}", span.name())?;
+
+            let ext = span.extensions();
+
+            // `FormattedFields` is a a formatted representation of the span's
+            // fields, which is stored in its extensions by the `fmt` layer's
+            // `new_span` method. The fields will have been formatted
+            // by the same field formatter that's provided to the event
+            // formatter in the `FmtContext`.
+            let fields = &ext
+                .get::<FormattedFields<N>>()
+                .expect("will never be `None`");
+
+            if !fields.is_empty() {
+                write!(writer, "{{{}}}", fields)?;
+            }
+            write!(writer, ": ")?;
+
+            Ok(())
+        })?;
+
+        // Write fields on the event
+        ctx.field_format().format_fields(writer, event)?;
+
+        writeln!(writer)
+    }
 }
