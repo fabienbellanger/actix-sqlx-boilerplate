@@ -12,6 +12,6 @@ plan:
     request:
       url: /v1/login
       method: POST
-      body: '{"email": "valentil@gmail.com", "password": "0000"}'
+      body: '{"email": "test@gmail.com", "password": "00000000"}'
       headers:
         Content-Type: 'application/json'

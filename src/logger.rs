@@ -81,7 +81,7 @@ pub fn init_tracing(level: String) {
 
     tracing_subscriber::registry()
     .with(EnvFilter::from_default_env().add_directive(tracing::Level::TRACE.into()))
-        .with(fmt::Layer::new().with_writer(non_blocking))
+        // .with(fmt::Layer::new().with_writer(non_blocking))
         .with(filter_layer)
         .with(fmt_layer)
         .init();
