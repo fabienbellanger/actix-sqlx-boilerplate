@@ -26,6 +26,7 @@ use actix_web_prom::PrometheusMetrics;
 use color_eyre::Result;
 use sqlx::{MySql, Pool};
 use std::time::Duration;
+use tracing_actix_web::TracingLogger;
 
 #[derive(Debug, Clone)]
 pub struct AppState {
@@ -37,7 +38,13 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
     // Logger
     // ------
     //logger::init(settings.rust_log);
-    logger::init_tracing("debug".to_owned());
+    // logger::init_tracing("trace".to_owned());
+    let subscriber = logger::get_subscriber(
+        "actix-sqlx-boilerplate".into(),
+        settings.rust_log.into(),
+        std::io::stdout,
+    );
+    logger::init_subscriber(subscriber);
 
     tracing::error!("Tracing error");
 
@@ -72,7 +79,11 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
             .wrap(middlewares::request_id::RequestIdService)
             .wrap(middlewares::timer::Timer)
             .wrap(prometheus.clone()) // Put before logger (issue #39)
-            .wrap(Logger::new("%s | %r | %Ts | %{User-Agent}i | %a | %{x-request-id}o"))
+            .wrap(TracingLogger) // Le request_id n'est pas le même que le middleware, celui de TracingLogger n'est pas envoyé dans la requête !
+            .wrap(Logger::new("%s | %r | %Ts | %{User-Agent}i | %a | %{x-request-id}o")) // Transformer :
+            // 200 | GET /health-check HTTP/1.1 | 0.000836s | Thunder Client (https://www.thunderclient.io) | 127.0.0.1:54070 | d756ab74-5422-4103-ad5e-8d2cd38eeec8
+            // en quelque chose qui ressemble à :
+            // (target=tracing_actix_web, line=136, elapsed_milliseconds=0, request_id=517e75d4-c397-486f-b4f1-1644b39b67cb, request_path=/health-check, user_agent="Thunder Client (https://www.thunderclient.io)", client_ip_address=127.0.0.1:54070, status_code=200)
             .wrap(
                 ErrorHandlers::new()
                     .handler(http::StatusCode::UNAUTHORIZED, handlers::errors::render_401)
