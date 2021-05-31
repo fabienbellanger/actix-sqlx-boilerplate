@@ -79,11 +79,8 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
             .wrap(middlewares::request_id::RequestIdService)
             .wrap(middlewares::timer::Timer)
             .wrap(prometheus.clone()) // Put before logger (issue #39)
-            .wrap(TracingLogger) // Le request_id n'est pas le même que le middleware, celui de TracingLogger n'est pas envoyé dans la requête !
-            .wrap(Logger::new("%s | %r | %Ts | %{User-Agent}i | %a | %{x-request-id}o")) // Transformer :
-            // 200 | GET /health-check HTTP/1.1 | 0.000836s | Thunder Client (https://www.thunderclient.io) | 127.0.0.1:54070 | d756ab74-5422-4103-ad5e-8d2cd38eeec8
-            // en quelque chose qui ressemble à :
-            // (target=tracing_actix_web, line=136, elapsed_milliseconds=0, request_id=517e75d4-c397-486f-b4f1-1644b39b67cb, request_path=/health-check, user_agent="Thunder Client (https://www.thunderclient.io)", client_ip_address=127.0.0.1:54070, status_code=200)
+            // .wrap(TracingLogger) // Le request_id n'est pas le même que le middleware, celui de TracingLogger n'est pas envoyé dans la requête !
+            .wrap(Logger::new("(request_id=%{x-request-id}o, client_ip_address=%a, request_path=\"%r\", status_code=%s, elapsed_seconds=%T, user_agent=\"%{User-Agent}i\")"))
             .wrap(
                 ErrorHandlers::new()
                     .handler(http::StatusCode::UNAUTHORIZED, handlers::errors::render_401)

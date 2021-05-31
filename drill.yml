@@ -1,6 +1,6 @@
-concurrency: 10
+concurrency: 100
 base: 'http://localhost:8089'
-iterations: 100
+iterations: 2000
 rampup: 0
 
 plan:
