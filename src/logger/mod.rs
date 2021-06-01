@@ -10,6 +10,8 @@ use tracing_log::LogTracer;
 use tracing_subscriber::fmt::MakeWriter;
 use tracing_subscriber::{fmt, prelude::*, EnvFilter, Registry};
 
+// TODO: Make own formatter like https://github.com/LukeMathWalker/tracing-bunyan-formatter/blob/master/
+
 /// Initialize logger
 pub fn init(level: String) {
     let level = match &*level {
