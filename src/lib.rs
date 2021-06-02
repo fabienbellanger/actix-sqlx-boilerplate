@@ -26,7 +26,6 @@ use actix_web_prom::PrometheusMetrics;
 use color_eyre::Result;
 use sqlx::{MySql, Pool};
 use std::time::Duration;
-use tracing_actix_web::TracingLogger;
 
 #[derive(Debug, Clone)]
 pub struct AppState {
@@ -41,8 +40,6 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
     // logger::init_tracing("trace".to_owned());
     let subscriber = logger::get_subscriber(settings.rust_log, std::io::stdout);
     logger::init_subscriber(subscriber);
-
-    tracing::error!("Tracing error");
 
     // Init application state
     // ----------------------
@@ -75,7 +72,6 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
             .wrap(middlewares::request_id::RequestIdService)
             .wrap(middlewares::timer::Timer)
             .wrap(prometheus.clone()) // Put before logger (issue #39)
-            .wrap(TracingLogger) // Le request_id n'est pas le même que le middleware, celui de TracingLogger n'est pas envoyé dans la requête !
             .wrap(Logger::new("request_id=%{x-request-id}o, client_ip_address=%a, request_path=\"%r\", status_code=%s, elapsed_seconds=%T, user_agent=\"%{User-Agent}i\""))
             .wrap(
                 ErrorHandlers::new()

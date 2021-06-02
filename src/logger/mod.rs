@@ -3,8 +3,7 @@
 mod formatter_layer;
 mod storage_layer;
 
-use env_logger::fmt::Color;
-use env_logger::Builder;
+use env_logger::{Builder, fmt::Color};
 use formatter_layer::CustomFormattingLayer;
 use log::Level;
 use std::io::Write;
@@ -91,14 +90,10 @@ pub fn get_subscriber(
     let env_filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new(env_filter));
     let formatting_layer = CustomFormattingLayer::new(sink);
 
-    // let file_appender = tracing_appender::rolling::daily("./logs", "axtix-sqlx.log");
-    // let (non_blocking, _guard) = tracing_appender::non_blocking(file_appender);
-
     Registry::default()
         .with(env_filter)
         .with(JsonStorageLayer)
         .with(formatting_layer)
-    // .with(fmt::Layer::new().with_writer(non_blocking))
 }
 
 /// Register a subscriber as global default to process span data.
