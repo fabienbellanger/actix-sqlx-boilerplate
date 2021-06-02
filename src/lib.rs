@@ -39,7 +39,7 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
     // ------
     //logger::init(settings.rust_log);
     // logger::init_tracing("trace".to_owned());
-    let subscriber = logger::get_subscriber(settings.rust_log.into(), std::io::stdout);
+    let subscriber = logger::get_subscriber(settings.rust_log, std::io::stdout);
     logger::init_subscriber(subscriber);
 
     tracing::error!("Tracing error");

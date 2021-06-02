@@ -1,4 +1,5 @@
 use super::storage_layer::JsonStorage;
+use chrono::{SecondsFormat, Utc};
 use serde::ser::{SerializeMap, Serializer};
 use serde_json::Value;
 use std::fmt;
@@ -67,7 +68,7 @@ impl<W: MakeWriter + 'static> CustomFormattingLayer<W> {
     ) -> Result<(), std::io::Error> {
         map_serializer.serialize_entry(MESSAGE, &message)?;
         map_serializer.serialize_entry(LEVEL, &to_custom_level(level))?;
-        map_serializer.serialize_entry(TIME, &chrono::Utc::now().to_rfc3339())?;
+        map_serializer.serialize_entry(TIME, &Utc::now().to_rfc3339_opts(SecondsFormat::Secs, true))?;
         Ok(())
     }
 

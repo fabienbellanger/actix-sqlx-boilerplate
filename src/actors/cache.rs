@@ -57,6 +57,6 @@ impl Handler<AddMessage> for Cache {
     type Result = ();
 
     fn handle(&mut self, msg: AddMessage, _ctx: &mut Context<Self>) -> Self::Result {
-        self.list.push(msg.0.clone());
+        self.list.push(msg.0);
     }
 }

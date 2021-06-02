@@ -20,6 +20,7 @@ pub struct User {
 }
 
 impl User {
+    #[warn(clippy::too_many_arguments)]
     pub fn init(
         id: String,
         lastname: String,

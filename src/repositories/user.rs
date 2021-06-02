@@ -34,10 +34,7 @@ impl UserRepository {
                 result.email,
                 Utc.from_utc_datetime(&result.created_at),
                 Utc.from_utc_datetime(&result.updated_at),
-                match result.deleted_at {
-                    None => None,
-                    Some(d) => Some(Utc.from_utc_datetime(&d)),
-                },
+                result.deleted_at.map(|d| Utc.from_utc_datetime(&d)),
             ))),
             None => Ok(None),
         }
@@ -106,10 +103,7 @@ impl UserRepository {
                 result.email,
                 Utc.from_utc_datetime(&result.created_at),
                 Utc.from_utc_datetime(&result.updated_at),
-                match result.deleted_at {
-                    None => None,
-                    Some(d) => Some(Utc.from_utc_datetime(&d)),
-                },
+                result.deleted_at.map(|d| Utc.from_utc_datetime(&d)),
             ))),
             None => Ok(None),
         }
