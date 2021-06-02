@@ -1,19 +1,21 @@
 //! Logger module for customize logs
 
+mod formatter_layer;
+mod storage_layer;
+
 use env_logger::fmt::Color;
 use env_logger::Builder;
+use formatter_layer::CustomFormattingLayer;
 use log::Level;
 use std::io::Write;
+use storage_layer::JsonStorageLayer;
 use tracing::Subscriber;
-use tracing_bunyan_formatter::{BunyanFormattingLayer, JsonStorageLayer};
 use tracing_log::LogTracer;
 use tracing_subscriber::fmt::MakeWriter;
 use tracing_subscriber::{fmt, prelude::*, EnvFilter, Registry};
 
-// TODO: Make own formatter like https://github.com/LukeMathWalker/tracing-bunyan-formatter/blob/master/
-
 /// Initialize logger
-pub fn init(level: String) {
+pub fn _init(level: String) {
     let level = match &*level {
         "trace" => Level::Trace,
         "debug" => Level::Debug,
@@ -56,7 +58,7 @@ pub fn init(level: String) {
         .init();
 }
 
-pub fn init_tracing(level: String) {
+pub fn _init_tracing(level: String) {
     let fmt_layer = fmt::layer()
         .json()
         .with_current_span(true)
@@ -83,12 +85,11 @@ pub fn init_tracing(level: String) {
 }
 
 pub fn get_subscriber(
-    name: String,
     env_filter: String,
     sink: impl MakeWriter + Send + Sync + 'static,
 ) -> impl Subscriber + Sync + Send {
     let env_filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new(env_filter));
-    let formatting_layer = BunyanFormattingLayer::new(name, sink);
+    let formatting_layer = CustomFormattingLayer::new(sink);
 
     // let file_appender = tracing_appender::rolling::daily("./logs", "axtix-sqlx.log");
     // let (non_blocking, _guard) = tracing_appender::non_blocking(file_appender);
