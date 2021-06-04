@@ -64,6 +64,14 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
     // Start server
     // ------------
     HttpServer::new(move || {
+        let cors = Cors::default()
+            // .allowed_origin("*")
+            .allowed_methods(vec!["GET", "POST", "PATCH", "PUT", "DELETE", "HEAD", "OPTIONS"])
+            .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
+            .allowed_header(http::header::CONTENT_TYPE)
+            .supports_credentials()
+            .max_age(3600);
+            
         App::new()
             .data(db_pool.clone())
             .data(data.clone())
@@ -82,16 +90,7 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
                     .handler(http::StatusCode::SERVICE_UNAVAILABLE, handlers::errors::render_503)
                     .handler(http::StatusCode::GATEWAY_TIMEOUT, handlers::errors::render_504),
             )
-            .wrap(
-                Cors::new()
-                    // .allowed_origin("*")
-                    .allowed_methods(vec!["GET", "POST", "PATCH", "PUT", "DELETE", "HEAD", "OPTIONS"])
-                    .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
-                    .allowed_header(http::header::CONTENT_TYPE)
-                    .supports_credentials()
-                    .max_age(3600)
-                    .finish(),
-            )
+            .wrap(cors)
             .configure(routes::web)
             .configure(routes::api)
             .service(fs::Files::new("/assets", "./static"))
