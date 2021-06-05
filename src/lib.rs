@@ -59,7 +59,7 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
     // Test of actor
     // -------------
     let cache_actor = actors::cache::Cache::default().start();
-    Arbiter::spawn(actors::cache::cache_loop(cache_actor.clone(), Duration::from_secs(300)));
+    Arbiter::spawn(actors::cache::cache_loop(cache_actor.clone(), Duration::from_secs(600)));
 
     // Start server
     // ------------
