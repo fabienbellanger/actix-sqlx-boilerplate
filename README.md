@@ -5,7 +5,7 @@ A simple Actix-web boilerplate using SQLx
 ## Routes
 [Documentation](ROUTES.md)
   
-## Logs
+## Run
 ```bash
 cargo run --bin api
 ```
