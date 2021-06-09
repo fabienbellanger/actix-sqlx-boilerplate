@@ -69,3 +69,4 @@ cargo doc --open --no-deps --document-private-items
     ```
 -  [ ] Watch [actix_sqlx_mysql_user_crud](https://github.com/jamesjmeyer210/actix_sqlx_mysql_user_crud)
 -  [ ] Watch [actixweb-sqlx-jwt](https://github.com/biluohc/actixweb-sqlx-jwt/blob/master/src/middlewares/auth.rs)
+-  [ ] Improve validator response error
