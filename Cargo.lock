@@ -352,9 +352,9 @@ dependencies = [
 
 [[package]]
 name = "actix-web-validator"
-version = "2.0.3"
+version = "2.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "59a73bd7986f835cec2fc21b6c749d33f64637c9cee3e1e2d25ba7a109e596f1"
+checksum = "ccc12baceaa6262daa4f00ce1cb60ddb0cab262474595af1993900f1c0fc53eb"
 dependencies = [
  "actix-router",
  "actix-web",
@@ -366,6 +366,7 @@ dependencies = [
  "mime",
  "serde 1.0.126",
  "serde_json",
+ "serde_qs",
  "serde_urlencoded",
  "validator",
 ]
@@ -2551,6 +2552,19 @@ dependencies = [
  "itoa",
  "ryu",
  "serde 1.0.126",
+]
+
+[[package]]
+name = "serde_qs"
+version = "0.8.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b22063cd705114614293767c69aa992531f72b0cc8a6b9145801920730fe25e4"
+dependencies = [
+ "actix-web",
+ "futures",
+ "percent-encoding",
+ "serde 1.0.126",
+ "thiserror",
 ]
 
 [[package]]

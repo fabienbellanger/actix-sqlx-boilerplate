@@ -1,9 +1,9 @@
 //! User model module
 
-use actix_web_validator::Validate;
 use serde::{Deserialize, Serialize};
 use sqlx::types::chrono::{DateTime, Utc};
 use uuid::Uuid;
+use validator::Validate;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct User {
