@@ -79,6 +79,11 @@ cargo doc --open --no-deps --document-private-items
     0: while executing migrations: error returned from database: 1062 (23000): Duplicate entry '20210316155055' for key 'PRIMARY'
     1: error returned from database: 1062 (23000): Duplicate entry '20210316155055' for key 'PRIMARY'
     ```
+-  [ ] Improve validator response error
+-  [ ] Add streaming with a large sqlx request
+-  [ ] Add unit tests
+-  [ ] Improve WebSocket routes
+
+## Help
 -  [ ] Watch [actix_sqlx_mysql_user_crud](https://github.com/jamesjmeyer210/actix_sqlx_mysql_user_crud)
 -  [ ] Watch [actixweb-sqlx-jwt](https://github.com/biluohc/actixweb-sqlx-jwt/blob/master/src/middlewares/auth.rs)
--  [ ] Improve validator response error
