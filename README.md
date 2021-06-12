@@ -10,6 +10,18 @@ A simple Actix-web boilerplate using SQLx
 cargo run --bin api
 ```
 
+## Logs
+The project uses tracing for logs.  
+To format them, the project [actix-web-logs-reader](https://github.com/fabienbellanger/actix-web-logs-reader) which is inspired by Luca Palmieri's [Bunyan project](https://github.com/LukeMathWalker/bunyan).  
+To install it, just run:
+```bash
+cargo install --git https://github.com/fabienbellanger/actix-web-logs-reader --branch main
+```
+Actix-web logs can be formatted like this:
+```bash
+cargo run | actix-web-logs-reader
+```
+
 ## Cargo watch
 cargo-watch repository: [Github](https://github.com/passcod/cargo-watch)
 Usage:
