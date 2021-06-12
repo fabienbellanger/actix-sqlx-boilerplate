@@ -13,7 +13,7 @@ extern crate chrono;
 extern crate serde;
 
 #[macro_use]
-extern crate log;
+extern crate tracing;
 
 use crate::config::Config;
 use crate::ws::chat::server;
@@ -36,7 +36,10 @@ pub struct AppState {
 pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
     // Logger
     // ------
-    logger::init(settings.rust_log);
+    //logger::init(settings.rust_log);
+    // logger::init_tracing("trace".to_owned());
+    let subscriber = logger::get_subscriber(settings.rust_log, std::io::stdout);
+    logger::init_subscriber(subscriber);
 
     // Init application state
     // ----------------------
@@ -56,11 +59,19 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
     // Test of actor
     // -------------
     let cache_actor = actors::cache::Cache::default().start();
-    Arbiter::spawn(actors::cache::cache_loop(cache_actor.clone(), Duration::from_secs(60)));
+    Arbiter::spawn(actors::cache::cache_loop(cache_actor.clone(), Duration::from_secs(600)));
 
     // Start server
     // ------------
     HttpServer::new(move || {
+        let cors = Cors::default()
+            // .allowed_origin("*")
+            .allowed_methods(vec!["GET", "POST", "PATCH", "PUT", "DELETE", "HEAD", "OPTIONS"])
+            .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
+            .allowed_header(http::header::CONTENT_TYPE)
+            .supports_credentials()
+            .max_age(3600);
+            
         App::new()
             .data(db_pool.clone())
             .data(data.clone())
@@ -69,7 +80,7 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
             .wrap(middlewares::request_id::RequestIdService)
             .wrap(middlewares::timer::Timer)
             .wrap(prometheus.clone()) // Put before logger (issue #39)
-            .wrap(Logger::new("%s | %r | %Ts | %{User-Agent}i | %a | %{x-request-id}o"))
+            .wrap(Logger::new("request_id=%{x-request-id}o, client_ip_address=%a, request_path=\"%r\", status_code=%s, elapsed_seconds=%T, user_agent=\"%{User-Agent}i\""))
             .wrap(
                 ErrorHandlers::new()
                     .handler(http::StatusCode::UNAUTHORIZED, handlers::errors::render_401)
@@ -79,16 +90,7 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
                     .handler(http::StatusCode::SERVICE_UNAVAILABLE, handlers::errors::render_503)
                     .handler(http::StatusCode::GATEWAY_TIMEOUT, handlers::errors::render_504),
             )
-            .wrap(
-                Cors::new()
-                    // .allowed_origin("*")
-                    .allowed_methods(vec!["GET", "POST", "PATCH", "PUT", "DELETE", "HEAD", "OPTIONS"])
-                    .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
-                    .allowed_header(http::header::CONTENT_TYPE)
-                    .supports_credentials()
-                    .max_age(3600)
-                    .finish(),
-            )
+            .wrap(cors)
             .configure(routes::web)
             .configure(routes::api)
             .service(fs::Files::new("/assets", "./static"))

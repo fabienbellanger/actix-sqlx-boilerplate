@@ -98,7 +98,7 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for WsChatSession {
                 let m = text.trim();
 
                 if m.is_empty() {
-                    return ();
+                    return;
                 }
 
                 // we check for /sss type of messages
