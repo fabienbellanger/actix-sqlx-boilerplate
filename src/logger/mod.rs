@@ -11,7 +11,7 @@ use storage_layer::JsonStorageLayer;
 use tracing::Subscriber;
 use tracing_log::LogTracer;
 use tracing_subscriber::fmt::MakeWriter;
-use tracing_subscriber::{fmt, prelude::*, EnvFilter, Registry};
+use tracing_subscriber::{prelude::*, EnvFilter, Registry};
 
 /// Initialize logger
 pub fn _init(level: String) {
@@ -55,32 +55,6 @@ pub fn _init(level: String) {
         })
         .filter(None, level.to_level_filter())
         .init();
-}
-
-pub fn _init_tracing(level: String) {
-    let fmt_layer = fmt::layer()
-        .json()
-        .with_current_span(true)
-        .with_span_list(false)
-        .with_target(true)
-        .with_level(true)
-        .with_timer(tracing_subscriber::fmt::time::ChronoUtc::with_format(String::from(
-            "%Y-%m-%dT%H:%M:%S",
-        )));
-
-    let level = match &*level {
-        "trace" => tracing::Level::TRACE,
-        "debug" => tracing::Level::DEBUG,
-        "info" => tracing::Level::INFO,
-        "warn" => tracing::Level::WARN,
-        &_ => tracing::Level::ERROR,
-    };
-
-    let subscriber = tracing_subscriber::registry()
-        .with(EnvFilter::from_default_env().add_directive(level.into()))
-        .with(fmt_layer);
-
-    tracing::subscriber::set_global_default(subscriber).expect("Unable to set a global collector");
 }
 
 pub fn get_subscriber(

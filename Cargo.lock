@@ -337,6 +337,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "actix-web-httpauth"
+version = "0.5.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0c3b11a07a3df3f7970fd8bd38cc66998b5549f507c54cc64c6e843bc82d6358"
+dependencies = [
+ "actix-web",
+ "base64 0.13.0",
+ "futures-util",
+]
+
+[[package]]
 name = "actix-web-prom"
 version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -393,6 +404,7 @@ dependencies = [
  "actix-service",
  "actix-web",
  "actix-web-actors",
+ "actix-web-httpauth",
  "actix-web-prom",
  "actix-web-validator",
  "askama",

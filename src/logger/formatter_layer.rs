@@ -13,8 +13,6 @@ use tracing_subscriber::layer::Context;
 use tracing_subscriber::registry::SpanRef;
 use tracing_subscriber::Layer;
 
-// Inspired from https://github.com/LukeMathWalker/tracing-bunyan-formatter
-
 const LEVEL: &str = "level";
 const TIME: &str = "time";
 const MESSAGE: &str = "msg";
@@ -39,23 +37,6 @@ pub struct CustomFormattingLayer<W: MakeWriter + 'static> {
 
 impl<W: MakeWriter + 'static> CustomFormattingLayer<W> {
     /// Create a new `CustomFormattingLayer`.
-    ///
-    /// You have to specify:
-    /// - a `make_writer`, which will be used to get a `Write` instance to write formatted records to.
-    ///
-    /// ## Using stdout
-    /// ```rust
-    /// use crate::logger::formatter_layer::CustomFormattingLayer;
-    ///
-    /// let formatting_layer = CustomFormattingLayer::new(std::io::stdout);
-    /// ```
-    ///
-    /// If you prefer, you can use closure syntax:
-    /// ```rust
-    /// use crate::logger::formatter_layer::CustomFormattingLayer;
-    ///
-    /// let formatting_layer = CustomFormattingLayer::new(|| std::io::stdout());
-    /// ```
     pub fn new(make_writer: W) -> Self {
         Self { make_writer }
     }
