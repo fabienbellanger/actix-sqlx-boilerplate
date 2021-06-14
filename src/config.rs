@@ -5,7 +5,7 @@ use eyre::WrapErr;
 use serde::Deserialize;
 
 /// Represents configuration structure
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone)]
 pub struct Config {
     pub environment: String,
     pub server_url: String,
