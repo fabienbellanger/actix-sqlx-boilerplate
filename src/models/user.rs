@@ -44,7 +44,7 @@ impl User {
     }
 
     pub fn new(user: UserCreation) -> Self {
-        User {
+        Self {
             id: Uuid::new_v4().to_string(),
             lastname: user.lastname,
             firstname: user.firstname,

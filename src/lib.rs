@@ -59,7 +59,7 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
     // ----------------------
     let cache_actor = actors::cache::Cache::default().start();
     Arbiter::spawn(actors::cache::cache_loop(cache_actor.clone(), Duration::from_secs(600)));
-    
+
     // Start server
     // ------------
     HttpServer::new(move || {
@@ -78,7 +78,7 @@ pub async fn run(settings: Config, db_pool: Pool<MySql>) -> Result<()> {
             .handler(http::StatusCode::BAD_GATEWAY, handlers::errors::render_502)
             .handler(http::StatusCode::SERVICE_UNAVAILABLE, handlers::errors::render_503)
             .handler(http::StatusCode::GATEWAY_TIMEOUT, handlers::errors::render_504);
-            
+
         App::new()
             .data(db_pool.clone())
             .data(data.clone())

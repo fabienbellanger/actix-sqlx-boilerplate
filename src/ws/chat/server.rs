@@ -93,6 +93,12 @@ impl ChatServer {
     }
 }
 
+impl Default for ChatServer {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 /// Make actor from `ChatServer`
 impl Actor for ChatServer {
     /// We are going to use simple Context, we just need ability to communicate

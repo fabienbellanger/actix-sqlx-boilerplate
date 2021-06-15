@@ -135,4 +135,44 @@ A simple Actix-web boilerplate using SQLx
     http DELETE localhost:8089/v1/users/123e4567-e89b-12d3-a456-426614174000 "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjNlNDU2Ny1lODliLTEyZDMtYTQ1Ni00MjY2MTQxNzQwMDAiLCJleHAiOjE2MTU0NDg2ODQsImlhdCI6MTYxNTM2MjI4NCwibmJmIjoxNjE1MzYyMjg0LCJ1c2VyX2lkIjoiMTIzZTQ1NjctZTg5Yi0xMmQzLWE0NTYtNDI2NjE0MTc0MDAwIiwidXNlcl9sYXN0bmFtZSI6ImM2MDAxZDViMmFjM2RmMzE0MjA0YThmOWQ3YTAwZTE1MDNjOWFiYTBmZDQ1Mzg2NDVkZTRiZjRjYzdlMjU1NWNmZTlmZjlkMDIzNmJmMzI3ZWQzZTkwNzg0OWE5OGRmNGQzMzBjNGJlYTU1MTAxN2Q0NjViNGMxZDliODBiY2IwIiwidXNlcl9maXJzdG5hbWUiOiJCZWxsYW5nZXIiLCJ1c2VyX2VtYWlsIjoiRmFiaWVuIn0.UkJ_5KEIhs--Hv8cfggEpb8xxv2UhiwjRQTIlNmudZ8h-XHlikev4fwXU7N9wbP1esIHlo2_tafPyjnGxCBscQ"
     ```
   Response code `204`
-  
+
+#### Tasks
+
+- `GET` `/v1/tasks`: Tasks list
+    ```bash
+    http GET localhost:8089/v1/tasks "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhMjRmZmMxZi1mYWE3LTRkYTktOTNhOC0xNDc0M2Y4YmJmM2YiLCJleHAiOjE2MjM3OTU4MzgsImlhdCI6MTYyMzc4ODYzOCwibmJmIjoxNjIzNzg4NjM4LCJ1c2VyX2lkIjoiYTI0ZmZjMWYtZmFhNy00ZGE5LTkzYTgtMTQ3NDNmOGJiZjNmIiwidXNlcl9sYXN0bmFtZSI6ImNlMmE0MjlhMWM3OWQ0MDY4YzBjN2U1NGY1NTAwY2UxNjI4NWQ4NTczMGNiOWVjMGI2MTI0MGY4OGVmOWM4NzAyOTIyMDBhMWMwNjliZDU3ZDVlMDkyODc0NTY3MDU4YzkxNzgyNTEzNzYzYmMzMGQ4NmZlZGNhNjM4MjBjNDgyIiwidXNlcl9maXJzdG5hbWUiOiJUZXN0IiwidXNlcl9lbWFpbCI6IlRvdG8ifQ.6QDio25aB3jO__VbS0S-0LlIsVgNyDYsSn7-xWLwIwm5v0pubHS4JT-ToicWuDmaV1lG39DF2V_OLCbmKKQjyQ"
+    ```
+    Response code `200`:
+    ```json
+    [
+        {
+            "id": "d4ad12fe-dcac-443f-8048-f05aa88d6e25",
+            "name": "Task name",
+            "description": "A long task description...",
+            "created_at": "2021-06-15T20:24:18Z",
+            "updated_at": "2021-06-15T20:24:18Z"
+        },
+        {
+            "id": "fa29c383-3db7-4253-bd6c-b51045fe0f12",
+            "name": "Task name without description",
+            "description": null,
+            "created_at": "2021-06-15T20:24:42Z",
+            "updated_at": "2021-06-15T20:24:42Z"
+        }
+    ]
+    ```
+
+- `POST` `/v1/tasks`: Task creation
+    ```bash
+    http POST localhost:8089/v1/tasks name="My Task" "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhMjRmZmMxZi1mYWE3LTRkYTktOTNhOC0xNDc0M2Y4YmJmM2YiLCJleHAiOjE2MjM3OTU4MzgsImlhdCI6MTYyMzc4ODYzOCwibmJmIjoxNjIzNzg4NjM4LCJ1c2VyX2lkIjoiYTI0ZmZjMWYtZmFhNy00ZGE5LTkzYTgtMTQ3NDNmOGJiZjNmIiwidXNlcl9sYXN0bmFtZSI6ImNlMmE0MjlhMWM3OWQ0MDY4YzBjN2U1NGY1NTAwY2UxNjI4NWQ4NTczMGNiOWVjMGI2MTI0MGY4OGVmOWM4NzAyOTIyMDBhMWMwNjliZDU3ZDVlMDkyODc0NTY3MDU4YzkxNzgyNTEzNzYzYmMzMGQ4NmZlZGNhNjM4MjBjNDgyIiwidXNlcl9maXJzdG5hbWUiOiJUZXN0IiwidXNlcl9lbWFpbCI6IlRvdG8ifQ.6QDio25aB3jO__VbS0S-0LlIsVgNyDYsSn7-xWLwIwm5v0pubHS4JT-ToicWuDmaV1lG39DF2V_OLCbmKKQjyQ"
+    ```
+    Response code `200`:
+    ```json
+    {
+        "id": "fa29c383-3db7-4253-bd6c-b51045fe0f12",
+        "name": "My Task",
+        "description": null,
+        "created_at": "2021-06-15T20:24:42.468853Z",
+        "updated_at": "2021-06-15T20:24:42.468858Z"
+    }
+    ```

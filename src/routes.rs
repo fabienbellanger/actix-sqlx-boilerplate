@@ -27,6 +27,12 @@ pub fn api(cfg: &mut web::ServiceConfig) {
                     .route("/{id}", web::get().to(handlers::users::get_by_id))
                     .route("/{id}", web::delete().to(handlers::users::delete))
                     .route("/{id}", web::put().to(handlers::users::update)),
+            )
+            .service(
+                web::scope("/tasks")
+                    .wrap(crate::middlewares::auth::Authentication)
+                    .route("", web::post().to(handlers::task::create))
+                    .route("", web::get().to(handlers::task::get_all)),
             ),
     );
 }

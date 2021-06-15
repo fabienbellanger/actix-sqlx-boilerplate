@@ -1,5 +1,4 @@
 -- Add up migration script here
--- Add migration script here
 CREATE TABLE IF NOT EXISTS `users` (
                                        `id` VARCHAR(36) NOT NULL,
                                        `lastname` VARCHAR(63) NOT NULL,

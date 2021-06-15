@@ -3,7 +3,7 @@
 mod formatter_layer;
 mod storage_layer;
 
-use env_logger::{Builder, fmt::Color};
+use env_logger::{fmt::Color, Builder};
 use formatter_layer::CustomFormattingLayer;
 use log::Level;
 use std::io::Write;

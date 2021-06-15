@@ -47,6 +47,7 @@ sqlx-cli repository: [Github](https://github.com/launchbadge/sqlx/tree/master/sq
 To create a migration:
 ```bash
 sqlx migrate add -r <name>
+sqlx migrate add -r create_users_table
 ```
 Run migrations:
 ```bash
