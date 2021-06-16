@@ -31,3 +31,15 @@ pub async fn get_all(pool: web::Data<MySqlPool>) -> Result<impl Responder, AppEr
 
     Ok(HttpResponse::Ok().json(tasks))
 }
+
+// Route: GET "/v1/tasks/stream"
+pub async fn get_all_stream(pool: web::Data<MySqlPool>) -> Result<impl Responder, AppError> {
+    let mut _tasks = TaskRepository::get_all(pool.get_ref());
+    let stream = crate::models::task::TaskStream {
+        number: 10_000, // *number,
+        next: 0,
+        buf: Default::default(),
+    };
+
+    Ok(HttpResponse::Ok().content_type("application/json").streaming(stream))
+}
