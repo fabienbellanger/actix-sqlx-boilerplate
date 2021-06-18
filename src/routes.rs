@@ -21,6 +21,7 @@ pub fn api(cfg: &mut web::ServiceConfig) {
             .route("/login", web::post().to(handlers::users::login))
             .route("/register", web::post().to(handlers::users::register))
             .route("/tasks/stream", web::get().to(handlers::task::get_all_stream))
+            .route("/tasks", web::get().to(handlers::task::get_all))
             .service(
                 web::scope("")
                     .wrap(crate::middlewares::auth::Authentication)
@@ -32,9 +33,8 @@ pub fn api(cfg: &mut web::ServiceConfig) {
                             .route("/{id}", web::put().to(handlers::users::update)),
                     )
                     .service(
-                        web::scope("/tasks")
-                            .route("", web::post().to(handlers::task::create))
-                            .route("", web::get().to(handlers::task::get_all)), // .route("/stream", web::get().to(handlers::task::get_all_stream)),
+                        web::scope("/tasks").route("", web::post().to(handlers::task::create)),
+                        // .route("", web::get().to(handlers::task::get_all)), // .route("/stream", web::get().to(handlers::task::get_all_stream)),
                     ),
             ),
     );
