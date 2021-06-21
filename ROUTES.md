@@ -46,9 +46,9 @@ A simple Actix-web boilerplate using SQLx
 
 #### Authentication / Registration
 
-- `POST` `/v1/login`: Authentication
+- `POST` `/api/v1/login`: Authentication
     ```bash
-    http POST localhost:8089/v1/login email=test@gmail.com password=00000000
+    http POST localhost:8089/api/v1/login email=test@gmail.com password=00000000
     ```
     Response code `200`:
     ```json
@@ -62,9 +62,9 @@ A simple Actix-web boilerplate using SQLx
     }
     ```
 
-- `POST` `/v1/register`: User registration
+- `POST` `/api/v1/register`: User registration
     ```bash
-    http POST localhost:8089/v1/register email=test@gmail.com password=00000000 lastname=Test firstname=Toto
+    http POST localhost:8089/api/v1/register email=test@gmail.com password=00000000 lastname=Test firstname=Toto
     ```
     Response code `200`:
     ```json
@@ -80,9 +80,9 @@ A simple Actix-web boilerplate using SQLx
 
 #### Users
 
-- `GET` `/v1/users`: Users list
+- `GET` `/api/v1/users`: Users list
     ```bash
-    http GET localhost:8089/v1/users "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjNlNDU2Ny1lODliLTEyZDMtYTQ1Ni00MjY2MTQxNzQwMDAiLCJleHAiOjE2MTU0NDg2ODQsImlhdCI6MTYxNTM2MjI4NCwibmJmIjoxNjE1MzYyMjg0LCJ1c2VyX2lkIjoiMTIzZTQ1NjctZTg5Yi0xMmQzLWE0NTYtNDI2NjE0MTc0MDAwIiwidXNlcl9sYXN0bmFtZSI6ImM2MDAxZDViMmFjM2RmMzE0MjA0YThmOWQ3YTAwZTE1MDNjOWFiYTBmZDQ1Mzg2NDVkZTRiZjRjYzdlMjU1NWNmZTlmZjlkMDIzNmJmMzI3ZWQzZTkwNzg0OWE5OGRmNGQzMzBjNGJlYTU1MTAxN2Q0NjViNGMxZDliODBiY2IwIiwidXNlcl9maXJzdG5hbWUiOiJCZWxsYW5nZXIiLCJ1c2VyX2VtYWlsIjoiRmFiaWVuIn0.UkJ_5KEIhs--Hv8cfggEpb8xxv2UhiwjRQTIlNmudZ8h-XHlikev4fwXU7N9wbP1esIHlo2_tafPyjnGxCBscQ"
+    http GET localhost:8089/api/v1/users "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjNlNDU2Ny1lODliLTEyZDMtYTQ1Ni00MjY2MTQxNzQwMDAiLCJleHAiOjE2MTU0NDg2ODQsImlhdCI6MTYxNTM2MjI4NCwibmJmIjoxNjE1MzYyMjg0LCJ1c2VyX2lkIjoiMTIzZTQ1NjctZTg5Yi0xMmQzLWE0NTYtNDI2NjE0MTc0MDAwIiwidXNlcl9sYXN0bmFtZSI6ImM2MDAxZDViMmFjM2RmMzE0MjA0YThmOWQ3YTAwZTE1MDNjOWFiYTBmZDQ1Mzg2NDVkZTRiZjRjYzdlMjU1NWNmZTlmZjlkMDIzNmJmMzI3ZWQzZTkwNzg0OWE5OGRmNGQzMzBjNGJlYTU1MTAxN2Q0NjViNGMxZDliODBiY2IwIiwidXNlcl9maXJzdG5hbWUiOiJCZWxsYW5nZXIiLCJ1c2VyX2VtYWlsIjoiRmFiaWVuIn0.UkJ_5KEIhs--Hv8cfggEpb8xxv2UhiwjRQTIlNmudZ8h-XHlikev4fwXU7N9wbP1esIHlo2_tafPyjnGxCBscQ"
     ```
     Response code `200`:
     ```json
@@ -98,9 +98,9 @@ A simple Actix-web boilerplate using SQLx
     ]
     ```
 
-- `GET` `/v1/users/{id}`: Get user information
+- `GET` `/api/v1/users/{id}`: Get user information
     ```bash
-    http GET localhost:8089/v1/users/123e4567-e89b-12d3-a456-426614174000 "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjNlNDU2Ny1lODliLTEyZDMtYTQ1Ni00MjY2MTQxNzQwMDAiLCJleHAiOjE2MTU0NDg2ODQsImlhdCI6MTYxNTM2MjI4NCwibmJmIjoxNjE1MzYyMjg0LCJ1c2VyX2lkIjoiMTIzZTQ1NjctZTg5Yi0xMmQzLWE0NTYtNDI2NjE0MTc0MDAwIiwidXNlcl9sYXN0bmFtZSI6ImM2MDAxZDViMmFjM2RmMzE0MjA0YThmOWQ3YTAwZTE1MDNjOWFiYTBmZDQ1Mzg2NDVkZTRiZjRjYzdlMjU1NWNmZTlmZjlkMDIzNmJmMzI3ZWQzZTkwNzg0OWE5OGRmNGQzMzBjNGJlYTU1MTAxN2Q0NjViNGMxZDliODBiY2IwIiwidXNlcl9maXJzdG5hbWUiOiJCZWxsYW5nZXIiLCJ1c2VyX2VtYWlsIjoiRmFiaWVuIn0.UkJ_5KEIhs--Hv8cfggEpb8xxv2UhiwjRQTIlNmudZ8h-XHlikev4fwXU7N9wbP1esIHlo2_tafPyjnGxCBscQ"
+    http GET localhost:8089/api/v1/users/123e4567-e89b-12d3-a456-426614174000 "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjNlNDU2Ny1lODliLTEyZDMtYTQ1Ni00MjY2MTQxNzQwMDAiLCJleHAiOjE2MTU0NDg2ODQsImlhdCI6MTYxNTM2MjI4NCwibmJmIjoxNjE1MzYyMjg0LCJ1c2VyX2lkIjoiMTIzZTQ1NjctZTg5Yi0xMmQzLWE0NTYtNDI2NjE0MTc0MDAwIiwidXNlcl9sYXN0bmFtZSI6ImM2MDAxZDViMmFjM2RmMzE0MjA0YThmOWQ3YTAwZTE1MDNjOWFiYTBmZDQ1Mzg2NDVkZTRiZjRjYzdlMjU1NWNmZTlmZjlkMDIzNmJmMzI3ZWQzZTkwNzg0OWE5OGRmNGQzMzBjNGJlYTU1MTAxN2Q0NjViNGMxZDliODBiY2IwIiwidXNlcl9maXJzdG5hbWUiOiJCZWxsYW5nZXIiLCJ1c2VyX2VtYWlsIjoiRmFiaWVuIn0.UkJ_5KEIhs--Hv8cfggEpb8xxv2UhiwjRQTIlNmudZ8h-XHlikev4fwXU7N9wbP1esIHlo2_tafPyjnGxCBscQ"
     ```
     Response code `200`:
     ```json
@@ -114,9 +114,9 @@ A simple Actix-web boilerplate using SQLx
     }
     ```
 
-- `PUT` `/v1/users/{id}`: Update user
+- `PUT` `/api/v1/users/{id}`: Update user
     ```bash
-    http PUT localhost:8089/v1/users/123e4567-e89b-12d3-a456-426614174000 "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjNlNDU2Ny1lODliLTEyZDMtYTQ1Ni00MjY2MTQxNzQwMDAiLCJleHAiOjE2MTU1NDk2OTksImlhdCI6MTYxNTQ2MzI5OSwibmJmIjoxNjE1NDYzMjk5LCJ1c2VyX2lkIjoiMTIzZTQ1NjctZTg5Yi0xMmQzLWE0NTYtNDI2NjE0MTc0MDAwIiwidXNlcl9sYXN0bmFtZSI6ImM2MDAxZDViMmFjM2RmMzE0MjA0YThmOWQ3YTAwZTE1MDNjOWFiYTBmZDQ1Mzg2NDVkZTRiZjRjYzdlMjU1NWNmZTlmZjlkMDIzNmJmMzI3ZWQzZTkwNzg0OWE5OGRmNGQzMzBjNGJlYTU1MTAxN2Q0NjViNGMxZDliODBiY2IwIiwidXNlcl9maXJzdG5hbWUiOiJCZWxsYW5nZXIiLCJ1c2VyX2VtYWlsIjoiRmFiaWVuIn0.EajIFTzXLVjlaefDTeyoC5NKfz_MaPAhIIV4AG2cUwRE8tB35HecyJJukHk0kQXOJyMllgahttV2qpk6wGgD3g" lastname="Test" firstname="Tutu" email="test@gmail.com" password="1111"
+    http PUT localhost:8089/api/v1/users/123e4567-e89b-12d3-a456-426614174000 "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjNlNDU2Ny1lODliLTEyZDMtYTQ1Ni00MjY2MTQxNzQwMDAiLCJleHAiOjE2MTU1NDk2OTksImlhdCI6MTYxNTQ2MzI5OSwibmJmIjoxNjE1NDYzMjk5LCJ1c2VyX2lkIjoiMTIzZTQ1NjctZTg5Yi0xMmQzLWE0NTYtNDI2NjE0MTc0MDAwIiwidXNlcl9sYXN0bmFtZSI6ImM2MDAxZDViMmFjM2RmMzE0MjA0YThmOWQ3YTAwZTE1MDNjOWFiYTBmZDQ1Mzg2NDVkZTRiZjRjYzdlMjU1NWNmZTlmZjlkMDIzNmJmMzI3ZWQzZTkwNzg0OWE5OGRmNGQzMzBjNGJlYTU1MTAxN2Q0NjViNGMxZDliODBiY2IwIiwidXNlcl9maXJzdG5hbWUiOiJCZWxsYW5nZXIiLCJ1c2VyX2VtYWlsIjoiRmFiaWVuIn0.EajIFTzXLVjlaefDTeyoC5NKfz_MaPAhIIV4AG2cUwRE8tB35HecyJJukHk0kQXOJyMllgahttV2qpk6wGgD3g" lastname="Test" firstname="Tutu" email="test@gmail.com" password="1111"
     ```
     Response code `200`:
     ```json
@@ -130,17 +130,17 @@ A simple Actix-web boilerplate using SQLx
     }
     ```
 
-- `DELETE` `/v1/users/{id}`: Delete user
+- `DELETE` `/api/v1/users/{id}`: Delete user
     ```bash
-    http DELETE localhost:8089/v1/users/123e4567-e89b-12d3-a456-426614174000 "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjNlNDU2Ny1lODliLTEyZDMtYTQ1Ni00MjY2MTQxNzQwMDAiLCJleHAiOjE2MTU0NDg2ODQsImlhdCI6MTYxNTM2MjI4NCwibmJmIjoxNjE1MzYyMjg0LCJ1c2VyX2lkIjoiMTIzZTQ1NjctZTg5Yi0xMmQzLWE0NTYtNDI2NjE0MTc0MDAwIiwidXNlcl9sYXN0bmFtZSI6ImM2MDAxZDViMmFjM2RmMzE0MjA0YThmOWQ3YTAwZTE1MDNjOWFiYTBmZDQ1Mzg2NDVkZTRiZjRjYzdlMjU1NWNmZTlmZjlkMDIzNmJmMzI3ZWQzZTkwNzg0OWE5OGRmNGQzMzBjNGJlYTU1MTAxN2Q0NjViNGMxZDliODBiY2IwIiwidXNlcl9maXJzdG5hbWUiOiJCZWxsYW5nZXIiLCJ1c2VyX2VtYWlsIjoiRmFiaWVuIn0.UkJ_5KEIhs--Hv8cfggEpb8xxv2UhiwjRQTIlNmudZ8h-XHlikev4fwXU7N9wbP1esIHlo2_tafPyjnGxCBscQ"
+    http DELETE localhost:8089/api/v1/users/123e4567-e89b-12d3-a456-426614174000 "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjNlNDU2Ny1lODliLTEyZDMtYTQ1Ni00MjY2MTQxNzQwMDAiLCJleHAiOjE2MTU0NDg2ODQsImlhdCI6MTYxNTM2MjI4NCwibmJmIjoxNjE1MzYyMjg0LCJ1c2VyX2lkIjoiMTIzZTQ1NjctZTg5Yi0xMmQzLWE0NTYtNDI2NjE0MTc0MDAwIiwidXNlcl9sYXN0bmFtZSI6ImM2MDAxZDViMmFjM2RmMzE0MjA0YThmOWQ3YTAwZTE1MDNjOWFiYTBmZDQ1Mzg2NDVkZTRiZjRjYzdlMjU1NWNmZTlmZjlkMDIzNmJmMzI3ZWQzZTkwNzg0OWE5OGRmNGQzMzBjNGJlYTU1MTAxN2Q0NjViNGMxZDliODBiY2IwIiwidXNlcl9maXJzdG5hbWUiOiJCZWxsYW5nZXIiLCJ1c2VyX2VtYWlsIjoiRmFiaWVuIn0.UkJ_5KEIhs--Hv8cfggEpb8xxv2UhiwjRQTIlNmudZ8h-XHlikev4fwXU7N9wbP1esIHlo2_tafPyjnGxCBscQ"
     ```
   Response code `204`
 
 #### Tasks
 
-- `GET` `/v1/tasks`: Tasks list
+- `GET` `/api/v1/tasks`: Tasks list
     ```bash
-    http GET localhost:8089/v1/tasks "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhMjRmZmMxZi1mYWE3LTRkYTktOTNhOC0xNDc0M2Y4YmJmM2YiLCJleHAiOjE2MjM3OTU4MzgsImlhdCI6MTYyMzc4ODYzOCwibmJmIjoxNjIzNzg4NjM4LCJ1c2VyX2lkIjoiYTI0ZmZjMWYtZmFhNy00ZGE5LTkzYTgtMTQ3NDNmOGJiZjNmIiwidXNlcl9sYXN0bmFtZSI6ImNlMmE0MjlhMWM3OWQ0MDY4YzBjN2U1NGY1NTAwY2UxNjI4NWQ4NTczMGNiOWVjMGI2MTI0MGY4OGVmOWM4NzAyOTIyMDBhMWMwNjliZDU3ZDVlMDkyODc0NTY3MDU4YzkxNzgyNTEzNzYzYmMzMGQ4NmZlZGNhNjM4MjBjNDgyIiwidXNlcl9maXJzdG5hbWUiOiJUZXN0IiwidXNlcl9lbWFpbCI6IlRvdG8ifQ.6QDio25aB3jO__VbS0S-0LlIsVgNyDYsSn7-xWLwIwm5v0pubHS4JT-ToicWuDmaV1lG39DF2V_OLCbmKKQjyQ"
+    http GET localhost:8089/api/v1/tasks "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhMjRmZmMxZi1mYWE3LTRkYTktOTNhOC0xNDc0M2Y4YmJmM2YiLCJleHAiOjE2MjM3OTU4MzgsImlhdCI6MTYyMzc4ODYzOCwibmJmIjoxNjIzNzg4NjM4LCJ1c2VyX2lkIjoiYTI0ZmZjMWYtZmFhNy00ZGE5LTkzYTgtMTQ3NDNmOGJiZjNmIiwidXNlcl9sYXN0bmFtZSI6ImNlMmE0MjlhMWM3OWQ0MDY4YzBjN2U1NGY1NTAwY2UxNjI4NWQ4NTczMGNiOWVjMGI2MTI0MGY4OGVmOWM4NzAyOTIyMDBhMWMwNjliZDU3ZDVlMDkyODc0NTY3MDU4YzkxNzgyNTEzNzYzYmMzMGQ4NmZlZGNhNjM4MjBjNDgyIiwidXNlcl9maXJzdG5hbWUiOiJUZXN0IiwidXNlcl9lbWFpbCI6IlRvdG8ifQ.6QDio25aB3jO__VbS0S-0LlIsVgNyDYsSn7-xWLwIwm5v0pubHS4JT-ToicWuDmaV1lG39DF2V_OLCbmKKQjyQ"
     ```
     Response code `200`:
     ```json
@@ -162,9 +162,9 @@ A simple Actix-web boilerplate using SQLx
     ]
     ```
 
-- `POST` `/v1/tasks`: Task creation
+- `POST` `/api/v1/tasks`: Task creation
     ```bash
-    http POST localhost:8089/v1/tasks name="My Task" "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhMjRmZmMxZi1mYWE3LTRkYTktOTNhOC0xNDc0M2Y4YmJmM2YiLCJleHAiOjE2MjM3OTU4MzgsImlhdCI6MTYyMzc4ODYzOCwibmJmIjoxNjIzNzg4NjM4LCJ1c2VyX2lkIjoiYTI0ZmZjMWYtZmFhNy00ZGE5LTkzYTgtMTQ3NDNmOGJiZjNmIiwidXNlcl9sYXN0bmFtZSI6ImNlMmE0MjlhMWM3OWQ0MDY4YzBjN2U1NGY1NTAwY2UxNjI4NWQ4NTczMGNiOWVjMGI2MTI0MGY4OGVmOWM4NzAyOTIyMDBhMWMwNjliZDU3ZDVlMDkyODc0NTY3MDU4YzkxNzgyNTEzNzYzYmMzMGQ4NmZlZGNhNjM4MjBjNDgyIiwidXNlcl9maXJzdG5hbWUiOiJUZXN0IiwidXNlcl9lbWFpbCI6IlRvdG8ifQ.6QDio25aB3jO__VbS0S-0LlIsVgNyDYsSn7-xWLwIwm5v0pubHS4JT-ToicWuDmaV1lG39DF2V_OLCbmKKQjyQ"
+    http POST localhost:8089/api/v1/tasks name="My Task" "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhMjRmZmMxZi1mYWE3LTRkYTktOTNhOC0xNDc0M2Y4YmJmM2YiLCJleHAiOjE2MjM3OTU4MzgsImlhdCI6MTYyMzc4ODYzOCwibmJmIjoxNjIzNzg4NjM4LCJ1c2VyX2lkIjoiYTI0ZmZjMWYtZmFhNy00ZGE5LTkzYTgtMTQ3NDNmOGJiZjNmIiwidXNlcl9sYXN0bmFtZSI6ImNlMmE0MjlhMWM3OWQ0MDY4YzBjN2U1NGY1NTAwY2UxNjI4NWQ4NTczMGNiOWVjMGI2MTI0MGY4OGVmOWM4NzAyOTIyMDBhMWMwNjliZDU3ZDVlMDkyODc0NTY3MDU4YzkxNzgyNTEzNzYzYmMzMGQ4NmZlZGNhNjM4MjBjNDgyIiwidXNlcl9maXJzdG5hbWUiOiJUZXN0IiwidXNlcl9lbWFpbCI6IlRvdG8ifQ.6QDio25aB3jO__VbS0S-0LlIsVgNyDYsSn7-xWLwIwm5v0pubHS4JT-ToicWuDmaV1lG39DF2V_OLCbmKKQjyQ"
     ```
     Response code `200`:
     ```json
