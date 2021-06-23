@@ -1,6 +1,6 @@
 concurrency: 100
 base: 'http://localhost:8089'
-iterations: 2000
+iterations: 1000
 rampup: 0
 
 plan:
@@ -10,8 +10,20 @@ plan:
   
   - name: Login
     request:
-      url: /v1/login
+      url: /api/v1/login
       method: POST
       body: '{"email": "test@gmail.com", "password": "00000000"}'
       headers:
         Content-Type: 'application/json'
+  
+  # - name: Task creation
+  #   request:
+  #     url: /api/v1/tasks
+  #     method: POST
+  #     body: '{"name": "My task", "description": "My description"}'
+  #     headers:
+  #       Content-Type: 'application/json'
+
+  - name: Tasks list with stream
+    request:
+      url: /api/v1/tasks/stream

@@ -1,7 +1,8 @@
 use actix_sqlx_boilerplate::config::Config;
 use actix_sqlx_boilerplate::run;
 use color_eyre::Result;
-use sqlx::MySqlPool;
+use sqlx::mysql::MySqlPoolOptions;
+use std::time::Duration;
 
 #[actix_web::main]
 async fn main() -> Result<()> {
@@ -16,7 +17,16 @@ async fn main() -> Result<()> {
 
     // Initialisation du pool MySQL
     // ----------------------------
-    let db_pool = MySqlPool::connect(db_url).await?;
+    // TODO: Put parameters in .env file.
+    let db_pool = MySqlPoolOptions::new()
+        .max_connections(100)
+        .max_lifetime(Some(Duration::from_secs(30)))
+        .connect_timeout(Duration::from_secs(30))
+        .idle_timeout(Duration::from_secs(30))
+        .min_connections(10)
+        .test_before_acquire(true)
+        .connect(db_url)
+        .await?;
 
     // Runs migrations
     // ---------------

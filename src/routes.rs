@@ -21,23 +21,22 @@ pub fn api(cfg: &mut web::ServiceConfig) {
             web::scope("/v1")
                 .route("/login", web::post().to(handlers::users::login))
                 .route("/register", web::post().to(handlers::users::register))
+                .route("/tasks", web::post().to(handlers::task::create))
                 .route("/tasks/stream", web::get().to(handlers::task::get_all_stream))
                 .route("/tasks/big", web::get().to(handlers::task::get_all_big))
                 .route("/tasks", web::get().to(handlers::task::get_all))
                 .service(
-                    web::scope("")
-                        .wrap(crate::middlewares::auth::Authentication)
-                        .service(
-                            web::scope("/users")
-                                .route("", web::get().to(handlers::users::get_all))
-                                .route("/{id}", web::get().to(handlers::users::get_by_id))
-                                .route("/{id}", web::delete().to(handlers::users::delete))
-                                .route("/{id}", web::put().to(handlers::users::update)),
-                        )
-                        .service(
-                            web::scope("/tasks").route("", web::post().to(handlers::task::create)),
-                            // .route("", web::get().to(handlers::task::get_all)), // .route("/stream", web::get().to(handlers::task::get_all_stream)),
-                        ),
+                    web::scope("").wrap(crate::middlewares::auth::Authentication).service(
+                        web::scope("/users")
+                            .route("", web::get().to(handlers::users::get_all))
+                            .route("/{id}", web::get().to(handlers::users::get_by_id))
+                            .route("/{id}", web::delete().to(handlers::users::delete))
+                            .route("/{id}", web::put().to(handlers::users::update)),
+                    ),
+                    // .service(
+                    //     web::scope("/tasks").route("", web::post().to(handlers::task::create)),
+                    //      .route("", web::get().to(handlers::task::get_all)), // .route("/stream", web::get().to(handlers::task::get_all_stream)),
+                    // ),
                 ),
         ),
     );

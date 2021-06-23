@@ -32,7 +32,7 @@ cargo watch -x 'run --bin api'
 ## Benchmark
 Use [Drill](https://github.com/fcsonline/drill)
 ```bash
-$ drill --benchmark drill.yml --stats --quiet
+drill --benchmark drill.yml --stats --quiet
 ```
 
 ## SQLx

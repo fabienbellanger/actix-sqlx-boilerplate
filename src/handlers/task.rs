@@ -39,7 +39,7 @@ pub async fn get_all(pool: web::Data<MySqlPool>) -> Result<impl Responder, AppEr
 pub async fn get_all_stream(pool: web::Data<MySqlPool>) -> Result<impl Responder, AppError> {
     let stream_tasks = async_stream::stream! {
         let mut tasks = TaskRepository::get_all(pool.get_ref());
-        let mut bytes = BytesMut::with_capacity(64);
+        let mut bytes = BytesMut::new();
 
         bytes.extend_from_slice("[".as_bytes());
         let byte = bytes.split().freeze();
@@ -52,10 +52,17 @@ pub async fn get_all_stream(pool: web::Data<MySqlPool>) -> Result<impl Responder
             }
             i += 1;
 
-            let _task = row.unwrap(); // TODO: gérer l'erreur
-            bytes.extend_from_slice(serde_json::to_string(&_task).unwrap().as_bytes());
-            let byte = bytes.split().freeze();
-            yield Ok::<Bytes, AppError>(byte)
+            match row {
+                Ok(row) => match serde_json::to_string(&row) {
+                        Ok(task) => {
+                            bytes.extend_from_slice(task.as_bytes());
+                            let byte = bytes.split().freeze();
+                            yield Ok::<Bytes, AppError>(byte)
+                        },
+                        Err(err) => error!("Tasks list stream error: {}", err)
+                    },
+                Err(err) => error!("Tasks list stream error: {}", err)
+            }
         }
 
         bytes.extend_from_slice("]".as_bytes());
