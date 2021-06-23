@@ -85,8 +85,8 @@ impl futures::Stream for TaskStream {
                 &mut this.buf,
                 &Task {
                     id: String::from(""),
-                    name: String::from("Task"),
-                    description: Some(String::from("Description")),
+                    name: String::from("A Task"),
+                    description: Some(String::from("A Long Long Description")),
                     created_at: Utc::now(),
                     updated_at: Utc::now(),
                     deleted_at: None,

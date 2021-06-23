@@ -22,6 +22,7 @@ pub fn api(cfg: &mut web::ServiceConfig) {
                 .route("/login", web::post().to(handlers::users::login))
                 .route("/register", web::post().to(handlers::users::register))
                 .route("/tasks/stream", web::get().to(handlers::task::get_all_stream))
+                .route("/tasks/big", web::get().to(handlers::task::get_all_big))
                 .route("/tasks", web::get().to(handlers::task::get_all))
                 .service(
                     web::scope("")

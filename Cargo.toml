@@ -28,6 +28,7 @@ actix-web-actors = "3"
 actix-web-prom = "0.5"
 actix-web-validator = "2.1.1"
 askama_actix = "0.11.1"
+async-stream = "0.3.2"
 bytes = "1.0.1"
 chrono = {version = "0.4.19", features = ["serde"]}
 color-eyre = "0.5.10"
