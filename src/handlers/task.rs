@@ -41,15 +41,31 @@ pub async fn get_all_stream(pool: web::Data<MySqlPool>) -> Result<impl Responder
         let mut tasks = TaskRepository::get_all(pool.get_ref());
         let mut bytes = BytesMut::with_capacity(64);
 
+        bytes.extend_from_slice("[".as_bytes());
+        let byte = bytes.split().freeze();
+        yield Ok::<Bytes, AppError>(byte);
+
+        let mut i = 0;
         while let Some(row) = tasks.try_next().await? {
-            let _task = row.unwrap();
+            if i > 0 {
+                bytes.extend_from_slice(",".as_bytes());
+            }
+            i += 1;
+
+            let _task = row.unwrap(); // TODO: gérer l'erreur
             bytes.extend_from_slice(serde_json::to_string(&_task).unwrap().as_bytes());
             let byte = bytes.split().freeze();
             yield Ok::<Bytes, AppError>(byte)
         }
+
+        bytes.extend_from_slice("]".as_bytes());
+        let byte = bytes.split().freeze();
+        yield Ok::<Bytes, AppError>(byte);
     };
 
-    Ok(HttpResponse::Ok().streaming(Box::pin(stream_tasks)))
+    Ok(HttpResponse::Ok()
+        .content_type("application/json")
+        .streaming(Box::pin(stream_tasks)))
 }
 
 // Route: GET "/v1/tasks/big"
