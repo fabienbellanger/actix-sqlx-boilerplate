@@ -21,6 +21,7 @@ pub struct User {
 
 impl User {
     #[warn(clippy::too_many_arguments)]
+    // TODO: Consider grouping some parameters into a new type.
     pub fn init(
         id: String,
         lastname: String,
