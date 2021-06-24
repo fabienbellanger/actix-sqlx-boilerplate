@@ -10,6 +10,11 @@ async fn main() -> Result<()> {
     // ------------------
     let settings = Config::from_env()?;
     let db_url = &settings.database_url;
+    let db_max_connections = &settings.database_max_connections;
+    let db_min_connections = &settings.database_min_connections;
+    let db_max_lifetime = &settings.database_max_lifetime;
+    let db_connect_timeout = &settings.database_connect_timeout;
+    let db_idle_timeout = &settings.database_idle_timeout;
 
     // Install Color Eyre
     // ------------------
@@ -17,13 +22,12 @@ async fn main() -> Result<()> {
 
     // Initialisation du pool MySQL
     // ----------------------------
-    // TODO: Put parameters in .env file.
     let db_pool = MySqlPoolOptions::new()
-        .max_connections(100)
-        .max_lifetime(Some(Duration::from_secs(30)))
-        .connect_timeout(Duration::from_secs(30))
-        .idle_timeout(Duration::from_secs(30))
-        .min_connections(10)
+        .max_connections(*db_max_connections)
+        .min_connections(*db_min_connections)
+        .max_lifetime(Some(Duration::from_secs(*db_max_lifetime)))
+        .connect_timeout(Duration::from_secs(*db_connect_timeout))
+        .idle_timeout(Duration::from_secs(*db_idle_timeout))
         .test_before_acquire(true)
         .connect(db_url)
         .await?;

@@ -15,6 +15,11 @@ pub struct Config {
     pub jwt_lifetime: i64,
     pub database_url: String,
     pub database_auto_migration: bool,
+    pub database_max_connections: u32,
+    pub database_min_connections: u32,
+    pub database_max_lifetime: u64,
+    pub database_connect_timeout: u64,
+    pub database_idle_timeout: u64,
 }
 
 impl Config {
