@@ -138,9 +138,24 @@ A simple Actix-web boilerplate using SQLx
 
 #### Tasks
 
+- `POST` `/api/v1/tasks`: Task creation
+    ```bash
+    http POST localhost:8089/api/v1/tasks name="My Task"
+    ```
+    Response code `200`:
+    ```json
+    {
+        "id": "fa29c383-3db7-4253-bd6c-b51045fe0f12",
+        "name": "My Task",
+        "description": null,
+        "created_at": "2021-06-15T20:24:42.468853Z",
+        "updated_at": "2021-06-15T20:24:42.468858Z"
+    }
+    ```
+
 - `GET` `/api/v1/tasks`: Tasks list
     ```bash
-    http GET localhost:8089/api/v1/tasks "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhMjRmZmMxZi1mYWE3LTRkYTktOTNhOC0xNDc0M2Y4YmJmM2YiLCJleHAiOjE2MjM3OTU4MzgsImlhdCI6MTYyMzc4ODYzOCwibmJmIjoxNjIzNzg4NjM4LCJ1c2VyX2lkIjoiYTI0ZmZjMWYtZmFhNy00ZGE5LTkzYTgtMTQ3NDNmOGJiZjNmIiwidXNlcl9sYXN0bmFtZSI6ImNlMmE0MjlhMWM3OWQ0MDY4YzBjN2U1NGY1NTAwY2UxNjI4NWQ4NTczMGNiOWVjMGI2MTI0MGY4OGVmOWM4NzAyOTIyMDBhMWMwNjliZDU3ZDVlMDkyODc0NTY3MDU4YzkxNzgyNTEzNzYzYmMzMGQ4NmZlZGNhNjM4MjBjNDgyIiwidXNlcl9maXJzdG5hbWUiOiJUZXN0IiwidXNlcl9lbWFpbCI6IlRvdG8ifQ.6QDio25aB3jO__VbS0S-0LlIsVgNyDYsSn7-xWLwIwm5v0pubHS4JT-ToicWuDmaV1lG39DF2V_OLCbmKKQjyQ"
+    http GET localhost:8089/api/v1/tasks
     ```
     Response code `200`:
     ```json
@@ -158,21 +173,32 @@ A simple Actix-web boilerplate using SQLx
             "description": null,
             "created_at": "2021-06-15T20:24:42Z",
             "updated_at": "2021-06-15T20:24:42Z"
-        }
+        },
+        ...
     ]
     ```
 
-- `POST` `/api/v1/tasks`: Task creation
+- `GET` `/api/v1/tasks/stream`: Tasks list with a stream
     ```bash
-    http POST localhost:8089/api/v1/tasks name="My Task" "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhMjRmZmMxZi1mYWE3LTRkYTktOTNhOC0xNDc0M2Y4YmJmM2YiLCJleHAiOjE2MjM3OTU4MzgsImlhdCI6MTYyMzc4ODYzOCwibmJmIjoxNjIzNzg4NjM4LCJ1c2VyX2lkIjoiYTI0ZmZjMWYtZmFhNy00ZGE5LTkzYTgtMTQ3NDNmOGJiZjNmIiwidXNlcl9sYXN0bmFtZSI6ImNlMmE0MjlhMWM3OWQ0MDY4YzBjN2U1NGY1NTAwY2UxNjI4NWQ4NTczMGNiOWVjMGI2MTI0MGY4OGVmOWM4NzAyOTIyMDBhMWMwNjliZDU3ZDVlMDkyODc0NTY3MDU4YzkxNzgyNTEzNzYzYmMzMGQ4NmZlZGNhNjM4MjBjNDgyIiwidXNlcl9maXJzdG5hbWUiOiJUZXN0IiwidXNlcl9lbWFpbCI6IlRvdG8ifQ.6QDio25aB3jO__VbS0S-0LlIsVgNyDYsSn7-xWLwIwm5v0pubHS4JT-ToicWuDmaV1lG39DF2V_OLCbmKKQjyQ"
+    http GET localhost:8089/api/v1/tasks/stream
     ```
     Response code `200`:
     ```json
-    {
-        "id": "fa29c383-3db7-4253-bd6c-b51045fe0f12",
-        "name": "My Task",
-        "description": null,
-        "created_at": "2021-06-15T20:24:42.468853Z",
-        "updated_at": "2021-06-15T20:24:42.468858Z"
-    }
+    [
+        {
+            "id": "d4ad12fe-dcac-443f-8048-f05aa88d6e25",
+            "name": "Task name",
+            "description": "A long task description...",
+            "created_at": "2021-06-15T20:24:18Z",
+            "updated_at": "2021-06-15T20:24:18Z"
+        },
+        {
+            "id": "fa29c383-3db7-4253-bd6c-b51045fe0f12",
+            "name": "Task name without description",
+            "description": null,
+            "created_at": "2021-06-15T20:24:42Z",
+            "updated_at": "2021-06-15T20:24:42Z"
+        },
+        ...
+    ]
     ```

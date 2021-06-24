@@ -66,10 +66,10 @@ impl ResponseError for AppError {
 // -----------
 impl From<sqlx::Error> for AppError {
     fn from(error: sqlx::Error) -> Self {
-        match error {
-            _ => Self::InternalError {
-                message: "Database Error".to_owned(),
-            },
+        error!("Database error: {:?}", error);
+
+        Self::InternalError {
+            message: "Database Error".to_owned(),
         }
     }
 }
@@ -78,10 +78,10 @@ impl From<sqlx::Error> for AppError {
 // ------------
 impl From<MailboxError> for AppError {
     fn from(error: MailboxError) -> Self {
-        match error {
-            _ => Self::InternalError {
-                message: "Actor Error".to_owned(),
-            },
+        error!("Actor MailBox error: {:?}", error);
+
+        Self::InternalError {
+            message: "Actor Error".to_owned(),
         }
     }
 }

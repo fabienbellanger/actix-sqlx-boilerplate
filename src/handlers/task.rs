@@ -9,8 +9,6 @@ use actix_web_validator::Json;
 use futures::TryStreamExt;
 use sqlx::MySqlPool;
 
-// Watch https://github.com/rich-murphey/sqlx-actix-streaming
-
 // Route: POST "/v1/tasks"
 pub async fn create(pool: web::Data<MySqlPool>, form: Json<TaskCreation>) -> Result<impl Responder, AppError> {
     let mut task = Task::new(form.0);
@@ -28,6 +26,7 @@ pub async fn create(pool: web::Data<MySqlPool>, form: Json<TaskCreation>) -> Res
 pub async fn get_all(pool: web::Data<MySqlPool>) -> Result<impl Responder, AppError> {
     let mut stream = TaskRepository::get_all(pool.get_ref());
     let mut tasks: Vec<Task> = Vec::new();
+
     while let Some(row) = stream.try_next().await? {
         tasks.push(row?);
     }
@@ -73,22 +72,4 @@ pub async fn get_all_stream(pool: web::Data<MySqlPool>) -> Result<impl Responder
     Ok(HttpResponse::Ok()
         .content_type("application/json")
         .streaming(Box::pin(stream_tasks)))
-}
-
-// Route: GET "/v1/tasks/big"
-pub async fn get_all_big() -> Result<impl Responder, AppError> {
-    let mut tasks: Vec<Task> = Vec::new();
-
-    for _i in 0..100_000 {
-        tasks.push(Task {
-            id: String::from(""),
-            name: String::from("A Task"),
-            description: Some(String::from("A Long Long Description")),
-            created_at: chrono::Utc::now(),
-            updated_at: chrono::Utc::now(),
-            deleted_at: None,
-        });
-    }
-
-    Ok(HttpResponse::Ok().json(tasks))
 }
