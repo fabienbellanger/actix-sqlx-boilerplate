@@ -35,6 +35,7 @@ pub async fn get_all(pool: web::Data<MySqlPool>) -> Result<impl Responder, AppEr
 }
 
 // Route: GET "/v1/tasks/stream"
+// TODO: Try with futures::StreamExt instead of async_stream.
 pub async fn get_all_stream(pool: web::Data<MySqlPool>) -> Result<impl Responder, AppError> {
     let stream_tasks = async_stream::stream! {
         let mut tasks = TaskRepository::get_all(pool.get_ref());
