@@ -6,8 +6,7 @@ use crate::AppState;
 use actix_service::{Service, Transform};
 use actix_web::{
     dev::{ServiceRequest, ServiceResponse},
-    http::Method,
-    http::StatusCode,
+    http::{header, Method, StatusCode},
     web::Data,
     Error, HttpResponse,
 };
@@ -73,7 +72,7 @@ where
             let secret_key = &app_state.jwt_secret_key;
             let token = req
                 .headers()
-                .get("Authorization")
+                .get(header::AUTHORIZATION)
                 .and_then(|h| h.to_str().ok())
                 .and_then(|h| {
                     let words = h.split("Bearer").collect::<Vec<&str>>();
