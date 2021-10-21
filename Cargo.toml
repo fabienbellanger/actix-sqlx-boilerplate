@@ -1,7 +1,7 @@
 [package]
 authors = ["Fabien Bellanger <valentil@gmail.com>"]
 description = "Actix-web - SQLx boilerplate"
-edition = "2018"
+edition = "2021"
 name = "actix_sqlx_boilerplate"
 readme = "README.md"
 repository = "https://github.com/fabienbellanger/actix-sqlx-boilerplate"
