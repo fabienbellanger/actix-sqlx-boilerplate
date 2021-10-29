@@ -31,11 +31,11 @@ fn to_custom_level(level: &Level) -> &str {
     }
 }
 
-pub struct CustomFormattingLayer<W: MakeWriter + 'static> {
+pub struct CustomFormattingLayer<W: for<'a> MakeWriter<'a> + 'static> {
     make_writer: W,
 }
 
-impl<W: MakeWriter + 'static> CustomFormattingLayer<W> {
+impl<W: for<'a> MakeWriter<'a> + 'static> CustomFormattingLayer<W> {
     /// Create a new `CustomFormattingLayer`.
     pub fn new(make_writer: W) -> Self {
         Self { make_writer }
@@ -159,7 +159,7 @@ fn format_event_message<S: Subscriber + for<'a> tracing_subscriber::registry::Lo
 impl<S, W> Layer<S> for CustomFormattingLayer<W>
 where
     S: Subscriber + for<'a> tracing_subscriber::registry::LookupSpan<'a>,
-    W: MakeWriter + 'static,
+    W: for<'a> MakeWriter<'a> + 'static,
 {
     fn on_event(&self, event: &Event<'_>, ctx: Context<'_, S>) {
         // Events do not necessarily happen in the context of a span, hence lookup_current
@@ -215,7 +215,7 @@ where
         }
     }
 
-    fn new_span(&self, _attrs: &Attributes, id: &Id, ctx: Context<'_, S>) {
+    fn on_new_span(&self, _attrs: &Attributes, id: &Id, ctx: Context<'_, S>) {
         let span = ctx.span(id).expect("Span not found, this is a bug");
         if let Ok(serialized) = self.serialize_span(&span, Type::EnterSpan) {
             let _ = self.emit(serialized);

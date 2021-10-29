@@ -59,7 +59,7 @@ pub fn _init(level: String) {
 
 pub fn get_subscriber(
     env_filter: String,
-    sink: impl MakeWriter + Send + Sync + 'static,
+    sink: impl for<'a> MakeWriter<'a> + Send + Sync + 'static,
 ) -> impl Subscriber + Sync + Send {
     let env_filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new(env_filter));
     let formatting_layer = CustomFormattingLayer::new(sink);
