@@ -31,7 +31,7 @@ askama_actix = "0.11"
 async-stream = "0.3"
 bytes = "1.0"
 chrono = {version = "0.4", features = ["serde"]}
-color-eyre = "0.5"
+color-eyre = "0.6"
 config = "0.11"
 derive_more = "0.99"
 dotenv = "0.15"
